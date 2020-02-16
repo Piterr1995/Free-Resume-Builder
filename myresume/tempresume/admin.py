@@ -20,5 +20,5 @@ class ClauseInline(admin.TabularInline):
 
 @admin.register(CV)
 class CV_Admin(admin.ModelAdmin):
-    fields = ['name',]
+    fields = ['name', 'first_name', 'last_name', 'date_of_birth', 'address', 'postal_code', 'city']
     inlines = [ExperienceInlines, EducationInlines, ClauseInline]
