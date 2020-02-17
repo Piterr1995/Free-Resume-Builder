@@ -12,8 +12,8 @@ class PersonalInfoForm(forms.Form):
     city = forms.CharField(max_length=100)
 
 class ExperienceForm(forms.Form):
-    start_date = forms.DateField()
-    end_date = forms.DateField()
-    company = forms.CharField(max_length=100)
-    position = forms.CharField(max_length=100)
+    start_date = forms.DateField(required=False)
+    end_date = forms.DateField(required=False)
+    company = forms.CharField(max_length=100, required=False)
+    position = forms.CharField(max_length=100, required=False)
     description = forms.Textarea()

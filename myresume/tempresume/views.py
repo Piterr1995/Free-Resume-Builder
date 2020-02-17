@@ -16,25 +16,45 @@ r = StrictRedis(host=settings.REDIS_HOST,
 def index(request):
     exp_forms = []
     if request.method == "POST":
-        form = PersonalInfoForm(request.POST)
-        # form1 = ExperienceForm(request.POST)
+        personal_info_form = PersonalInfoForm(request.POST)
+        experience_form = ExperienceForm(request.POST)
         # form2 = ExperienceForm(request.POST)
 
-        if form.is_valid():
-            name = form.cleaned_data['first_name']
-            last_name = form.cleaned_data['last_name']
-            date_of_birth = str(form.cleaned_data['date_of_birth'])
-            address = str(form.cleaned_data['address'])
-            postal_code = form.cleaned_data['postal_code']
-            city = form.cleaned_data['city']
+        if personal_info_form.is_valid() and experience_form.is_valid():
+            #Personal Info
+            name = personal_info_form.cleaned_data['first_name']
+            last_name = personal_info_form.cleaned_data['last_name']
+            date_of_birth = str(personal_info_form.cleaned_data['date_of_birth'])
+            address = str(personal_info_form.cleaned_data['address'])
+            postal_code = personal_info_form.cleaned_data['postal_code']
+            city = personal_info_form.cleaned_data['city']
+
+            #Experience
+            exp1_form = exp2_form = exp3_form = exp4_form = exp5_form = exp6_form = exp7_form = exp8_form = exp9_form = exp10_form = ExperienceForm(request.POST)
+            exp_forms = [exp1_form, exp2_form, exp3_form, exp4_form, exp5_form, exp6_form, exp7_form, exp8_form, exp9_form, exp10_form]
+            
             # exp_1_company = form1.cleaned_data['company']
             # exp_2_company = form2.cleaned_data['company']
-            data = {'name': name, 
-                    'last_name': last_name, 
-                    'date_of_birth': date_of_birth,
-                    'address': address,
-                    'postal_code': postal_code,
-                    'city': city}
+            data = {'Personal_info': {'name': name, 
+                                    'last_name': last_name, 
+                                    'date_of_birth': date_of_birth,
+                                    'address': address,
+                                    'postal_code': postal_code,
+                                    'city': city}
+            }
+
+            data["Experience"] = {}
+
+            for exp_form in exp_forms:
+                data['Experience'][f'{i}'] = {'company': exp_form.cleaned_data['company'],
+                                            'start_date': exp_form.cleaned_data['start_date'],
+                                            'end_date': exp_form.cleaned_data['end_date'],
+                                            'description': exp_form.description['description'],
+                                            }
+                    
+            
+            print(data)
+            
             rdict = json.dumps(data)
             r.set(f'{date_of_birth}', rdict)
             r.expire(f'{date_of_birth}', 120)
@@ -46,12 +66,12 @@ def index(request):
             return redirect('www.fcbarca.com')
     else:
         print("witam")
-        form = PersonalInfoForm()
-        # form1 = ExperienceForm()
-        # form2 = ExperienceForm()
+        personal_info_form = PersonalInfoForm()
+        exp1_form = exp2_form = exp3_form = exp4_form = exp5_form = exp6_form = exp7_form = exp8_form = exp9_form = exp10_form = ExperienceForm()
+        exp_forms = [exp1_form, exp2_form, exp3_form, exp4_form, exp5_form, exp6_form, exp7_form, exp8_form, exp9_form, exp10_form]
         
         
-    return render(request, 'tempresume/index.html', {'form': form,})
+    return render(request, 'tempresume/index.html', {'personal_info_form': personal_info_form, 'exp_forms': exp_forms})
 
 
     
