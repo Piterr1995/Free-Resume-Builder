@@ -52,10 +52,13 @@ def index(request):
             #                             'end_date': str(exp_2_form.cleaned_data['end_date']),
             #                             }
             for index, exp_form in enumerate(exp_forms):
-                data['Experience'][f'{index}'] = 
-                                            {'company': str(exp_form.cleaned_data['company']),
-                                            'start_date': str(exp_form.cleaned_data['start_date']),
-                                            'end_date': str(exp_form.cleaned_data['end_date']),
+                if exp_form.cleaned_data['company']:
+                    company = exp_form.cleaned_data['company']
+                else:
+                    company = None
+                data['Experience'][f'{index}'] = {'company': str(company),
+                                                'start_date': str(exp_form.cleaned_data['start_date']),
+                                                'end_date': str(exp_form.cleaned_data['end_date']),
                                             # 'description': exp_form.cleaned_data['description'],
                                             }
                     
