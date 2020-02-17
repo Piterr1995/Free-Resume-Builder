@@ -14,13 +14,12 @@ r = StrictRedis(host=settings.REDIS_HOST,
 
 
 def index(request):
-    exp_forms = []
     if request.method == "POST":
         personal_info_form = PersonalInfoForm(request.POST)
-        experience_form = ExperienceForm(request.POST)
-        # form2 = ExperienceForm(request.POST)
+        exp_1_form = exp_2_form = exp_3_form = exp_4_form = exp_5_form = exp_6_form = exp_7_form = exp_8_form = exp_9_form = exp_10_form = ExperienceForm(request.POST)
+        exp_forms = [exp_1_form, exp_2_form, exp_3_form, exp_4_form, exp_5_form, exp_6_form, exp_7_form, exp_8_form, exp_9_form, exp_10_form]
+        if personal_info_form.is_valid() and [form.is_valid() for form in exp_forms]:
 
-        if personal_info_form.is_valid() and experience_form.is_valid():
             #Personal Info
             name = personal_info_form.cleaned_data['first_name']
             last_name = personal_info_form.cleaned_data['last_name']
@@ -30,8 +29,8 @@ def index(request):
             city = personal_info_form.cleaned_data['city']
 
             #Experience
-            exp1_form = exp2_form = exp3_form = exp4_form = exp5_form = exp6_form = exp7_form = exp8_form = exp9_form = exp10_form = ExperienceForm(request.POST)
-            exp_forms = [exp1_form, exp2_form, exp3_form, exp4_form, exp5_form, exp6_form, exp7_form, exp8_form, exp9_form, exp10_form]
+            # exp1_form = exp2_form = exp3_form = exp4_form = exp5_form = exp6_form = exp7_form = exp8_form = exp9_form = exp10_form = ExperienceForm(request.POST)
+            # exp_forms = [exp1_form, exp2_form, exp3_form, exp4_form, exp5_form, exp6_form, exp7_form, exp8_form, exp9_form, exp10_form]
             
             # exp_1_company = form1.cleaned_data['company']
             # exp_2_company = form2.cleaned_data['company']
@@ -44,12 +43,20 @@ def index(request):
             }
 
             data["Experience"] = {}
-
-            for exp_form in exp_forms:
-                data['Experience'][f'{i}'] = {'company': exp_form.cleaned_data['company'],
-                                            'start_date': exp_form.cleaned_data['start_date'],
-                                            'end_date': exp_form.cleaned_data['end_date'],
-                                            'description': exp_form.description['description'],
+            # data['Experience']['1'] = {'company': exp_1_form.cleaned_data['company'],
+            #                             'start_date': str(exp_1_form.cleaned_data['start_date']),
+            #                             'end_date': str(exp_1_form.cleaned_data['end_date']),
+            #                             }
+            # data['Experience']['2'] = {'company': exp_2_form.cleaned_data['company'],
+            #                             'start_date': str(exp_2_form.cleaned_data['start_date']),
+            #                             'end_date': str(exp_2_form.cleaned_data['end_date']),
+            #                             }
+            for index, exp_form in enumerate(exp_forms):
+                data['Experience'][f'{index}'] = 
+                                            {'company': str(exp_form.cleaned_data['company']),
+                                            'start_date': str(exp_form.cleaned_data['start_date']),
+                                            'end_date': str(exp_form.cleaned_data['end_date']),
+                                            # 'description': exp_form.cleaned_data['description'],
                                             }
                     
             
@@ -69,7 +76,8 @@ def index(request):
         personal_info_form = PersonalInfoForm()
         exp1_form = exp2_form = exp3_form = exp4_form = exp5_form = exp6_form = exp7_form = exp8_form = exp9_form = exp10_form = ExperienceForm()
         exp_forms = [exp1_form, exp2_form, exp3_form, exp4_form, exp5_form, exp6_form, exp7_form, exp8_form, exp9_form, exp10_form]
-        
+        # exp_1_form = ExperienceForm()
+        # exp_2_form = ExperienceForm()
         
     return render(request, 'tempresume/index.html', {'personal_info_form': personal_info_form, 'exp_forms': exp_forms})
 
