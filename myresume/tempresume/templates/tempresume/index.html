@@ -8,15 +8,36 @@
     <form action="." method="post">
         {{ personal_info_form|crispy }}
         
-        <!-- {{ exp_1_form|crispy }}
-        {{ exp_2_form|crispy }} -->
+        <!-- {{ exp_form|crispy }} -->
+        <!-- {{ exp_2_form|crispy }} -->
 
-        {% for exp_form in exp_forms %}
+        <!-- {% for exp_form in exp_forms %}
        
             {{ exp_form|crispy }}
         
         {% endfor %}
+
+        {% for edu_form in edu_forms %}
+            {{ edu_form|crispy }}
+        {% endfor %} -->
+        <!-- {{ experience_formset.management_form }} -->
+            <!-- {% for exp_form in experience_formset %}
+                {{ exp_form|crispy }}
+            {% endfor %} -->
+            {{ experience_formset|crispy }}
         
+        <!-- {{ education_formset.management_form }} -->
+        <!-- {% for edu_form in education_formset %}
+            {{ edu_form|crispy }}
+        {% endfor %} -->
+
+            {{ education_formset|crispy }}
+        
+        {% csrf_token %}
+        
+    </form>
+    <form action=".">
+        {{ education_formset|crispy }}
         {% csrf_token %}
         <input type="submit" value="dodaj">
     </form>
