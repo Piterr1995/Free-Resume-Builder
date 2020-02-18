@@ -34,12 +34,6 @@
             {{ education_formset|crispy }}
         
         {% csrf_token %}
-        
-    </form>
-    <form action=".">
-        {{ education_formset|crispy }}
-        {% csrf_token %}
         <input type="submit" value="dodaj">
     </form>
-   
 {% endblock %}

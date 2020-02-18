@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.forms import formset_factory
 import json
+from django.views.decorators.http import require_POST
 
 # Create your views here
 
@@ -130,6 +131,9 @@ r = StrictRedis(host=settings.REDIS_HOST,
  
 
 def index(request):
+    ExperienceFormset = formset_factory(ExperienceForm, extra=9)
+    EducationFormset = formset_factory(EducationForm, extra=4)
+    
     if request.method == "POST":
         #Personal info Form
         personal_info_form = PersonalInfoForm(request.POST)
@@ -138,13 +142,12 @@ def index(request):
         # exp_1_form = exp_2_form = exp_3_form = exp_4_form = exp_5_form = exp_6_form = exp_7_form = exp_8_form = exp_9_form = exp_10_form = ExperienceForm(request.POST)
         # exp_forms = [exp_1_form, exp_2_form, exp_3_form, exp_4_form, exp_5_form, exp_6_form, exp_7_form, exp_8_form, exp_9_form, exp_10_form]
 
-        ExperienceFormset = formset_factory(ExperienceForm, extra=9)
         experience_formset = ExperienceFormset(request.POST, prefix='experience')
         
         #Education forms
         # edu_1_form = edu_2_form = edu_3_form = edu_4_form = edu_5_form = EducationForm(request.POST)
         # edu_forms = [edu_1_form, edu_2_form, edu_3_form, edu_4_form, edu_5_form]
-        EducationFormset = formset_factory(EducationForm, extra=4)
+        # EducationFormset = formset_factory(EducationForm, extra=4)
         education_formset = EducationFormset(request.POST, prefix='education')
 
         if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid():
@@ -167,23 +170,23 @@ def index(request):
             }
 
 
-            #Experience
+            # Experience
             data["Experience"] = {}
 
             for index, exp_form in enumerate(experience_formset):
-                print(index, exp_form.cleaned_data)
-                # data['Experience'][f'{index}'] = {'company': exp_form.cleaned_data['company'],
-                #                                 'position': exp_form.cleaned_data['position'],
-                #                                 'start_date': exp_form.cleaned_data['start_date'],
-                #                                 'end_date': exp_form.cleaned_data['end_date'],
-                #                             # 'description': exp_form.cleaned_data['description'],
-                #                             }
+                # print(exp_form.cleaned_data.get('company'))
+                data['Experience'][f'{index}'] = {'company': exp_form.cleaned_data.get('company'),
+                                                'position': exp_form.cleaned_data.get('position'),
+                                                'start_date': str(exp_form.cleaned_data.get('start_date')),
+                                                'end_date': str(exp_form.cleaned_data.get('end_date')),
+                                            # 'description': exp_form.cleaned_data['description'],
+                                            }
 
 
-            data['Education'] = {}
+            # data['Education'] = {}
 
-            for index, edu_form in enumerate(education_formset):
-                print(index, edu_form.cleaned_data)
+            # for index, edu_form in enumerate(education_formset):
+                # print(index, edu_form.cleaned_data)
 
                 # start_date = str(edu_form.cleaned_data['start_date'])
                 # end_date = str(edu_form.cleaned_data['end_date'])
@@ -206,30 +209,43 @@ def index(request):
                 #                             # 'description': exp_form.cleaned_data['description'],
                 #                             }
         
-            # print(data)
+            print(data)
             
-            # rdict = json.dumps(data)
-            # r.set(f'{CV_name}/{date_of_birth}', rdict)
-            # r.expire(f'{CV_name}/{date_of_birth}', 120)
+            rdict = json.dumps(data)
+            r.set(f'{CV_name}/{date_of_birth}', rdict)
+            r.expire(f'{CV_name}/{date_of_birth}', 120)
             
-            # data_from_redis = r.get(f'{CV_name}/{date_of_birth}')
-            # results = json.loads(data_from_redis)
+            data_from_redis = r.get(f'{CV_name}/{date_of_birth}')
+            results = json.loads(data_from_redis)
 
-            # print(results)
-            # return redirect('www.fcbarca.com')
+            print(results)
+            return redirect(request.path_info)
     else:
         print("witam")
         personal_info_form = PersonalInfoForm()
         
-        ExperienceFormset = formset_factory(ExperienceForm, extra=9)
+        # ExperienceFormset = formset_factory(ExperienceForm, extra=9)
         experience_formset = ExperienceFormset(prefix='experience')
 
-        EducationFormset = formset_factory(EducationForm, extra=4)
+        # EducationFormset = formset_factory(EducationForm, extra=4)
         education_formset = EducationFormset(prefix='education')
 
         
     return render(request, 'tempresume/index.html', {'personal_info_form': personal_info_form, 'experience_formset': experience_formset, 'education_formset': education_formset})
 
 
-def experience(request):
-    
+# # @require_POST
+# def experience(request):
+#     if request.method == "POST":
+#         ExperienceFormset = formset_factory(ExperienceForm, extra=9)
+#         experience_formset = ExperienceFormset(request.POST, prefix='experience')
+
+#         if experience_formset.is_valid():
+#             for index, exp_form in enumerate(experience_formset):
+#                 print(index, exp_form.cleaned_data)
+#                 # data['Experience'][f'{index}'] = {'company': exp_form.cleaned_data['company'],
+#                 #                                 'position': exp_form.cleaned_data['position'],
+#                 #                                 'start_date': exp_form.cleaned_data['start_date'],
+#                 #                                 'end_date': exp_form.cleaned_data['end_date'],
+#                 #                             # 'description': exp_form.cleaned_data['description'],
+#                 #                             }
