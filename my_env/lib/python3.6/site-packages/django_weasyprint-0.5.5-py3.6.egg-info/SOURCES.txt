@@ -1,0 +1,15 @@
+AUTHORS
+LICENSE
+MANIFEST.in
+README.rst
+setup.cfg
+setup.py
+django_weasyprint/__init__.py
+django_weasyprint/models.py
+django_weasyprint/utils.py
+django_weasyprint/views.py
+django_weasyprint.egg-info/PKG-INFO
+django_weasyprint.egg-info/SOURCES.txt
+django_weasyprint.egg-info/dependency_links.txt
+django_weasyprint.egg-info/requires.txt
+django_weasyprint.egg-info/top_level.txt
