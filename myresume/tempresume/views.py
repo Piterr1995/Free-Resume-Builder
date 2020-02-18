@@ -174,42 +174,69 @@ def index(request):
             data["Experience"] = {}
 
             for index, exp_form in enumerate(experience_formset):
+                e = exp_form.cleaned_data
                 # print(exp_form.cleaned_data.get('company'))
-                data['Experience'][f'{index}'] = {'company': exp_form.cleaned_data.get('company'),
-                                                'position': exp_form.cleaned_data.get('position'),
-                                                'start_date': str(exp_form.cleaned_data.get('start_date')),
-                                                'end_date': str(exp_form.cleaned_data.get('end_date')),
+                if e.get('company'):
+                    company = str(e.get('company'))
+                else:
+                    company = None
+                if e.get('position'):
+                    position = str(e.get('position'))
+                else:
+                    position = None
+                if e.get('start_date'):
+                    start_date = str(e.get('start_date'))
+                else:
+                    start_date = None
+                if e.get('end_date'):
+                    end_date = str(e.get('end_date'))
+                else:
+                    end_date = None
+
+                data['Experience'][f'{index}'] = {'company': company,
+                                                'position': position,
+                                                'start_date': start_date,
+                                                'end_date': end_date,
                                             # 'description': exp_form.cleaned_data['description'],
                                             }
 
 
-            # data['Education'] = {}
+            data['Education'] = {}
 
-            # for index, edu_form in enumerate(education_formset):
+             
+            for index, edu_form in enumerate(education_formset):
+                e = edu_form.cleaned_data
                 # print(index, edu_form.cleaned_data)
+                
+                if e.get('institution'):
+                    institution = str(e.get('institution'))
+                else:
+                    institution = None
+                
+                if e.get('specialisation'):
+                    specialisation = str(e.get('specialistation'))
+                else:
+                    specialisation = None
 
-                # start_date = str(edu_form.cleaned_data['start_date'])
-                # end_date = str(edu_form.cleaned_data['end_date'])
+                if e.get('start_date'):
+                    start_date = str(e.get('start_date'))
+                else:
+                    start_date = None
                 
-                # if edu_form.cleaned_data['institution']:
-                #     institution = str(edu_form.cleaned_data['institution'])
-                # else:
-                #     institution = None
-                
-                # if edu_form.cleaned_data['specialisation']:
-                #     specialisation = str(edu_form.cleaned_data['specialistation'])
-                # else:
-                #     specialisation = None
-                
-                
-                # data['Education'][f'{index}'] = {'institution': institution,
-                #                                 'specialisation': specialisation,
-                #                                 'start_date': start_date,
-                #                                 'end_date': end_date,
-                #                             # 'description': exp_form.cleaned_data['description'],
-                #                             }
-        
-            print(data)
+                if e.get('end_date'):
+                    end_date = str(e.get('end_date'))
+                else:
+                    end_date = None
+            
+            
+                data['Education'][f'{index}'] = {'institution': institution,
+                                                'specialisation': specialisation,
+                                                'start_date': start_date,
+                                                'end_date': end_date,
+                                            # 'description': exp_form.cleaned_data['description'],
+                                        }
+    
+            # print(data)
             
             rdict = json.dumps(data)
             r.set(f'{CV_name}/{date_of_birth}', rdict)
