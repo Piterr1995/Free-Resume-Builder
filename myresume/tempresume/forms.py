@@ -1,5 +1,5 @@
 from django import forms
-
+from ckeditor.fields import RichTextFormField
 
 class PersonalInfoForm(forms.Form):
     CV_name = forms.CharField(max_length=100, label="CV name")
@@ -13,13 +13,13 @@ class PersonalInfoForm(forms.Form):
 class ExperienceForm(forms.Form):
     company = forms.CharField(max_length=100, required=False)
     position = forms.CharField(max_length=100, required=False)
-    start_date = forms.DateField(required=False)
-    end_date = forms.DateField(required=False) 
-    description = forms.Textarea()
+    start_date = forms.DateField(required=False, widget=forms.SelectDateWidget)
+    end_date = forms.DateField(required=False, widget=forms.SelectDateWidget) 
+    description = RichTextFormField(required=False)
 
 class EducationForm(forms.Form):
     institution = forms.CharField(max_length=100, required=False)
     specialisation = forms.CharField(max_length=100, required=False)
     start_date = forms.DateField(required=False)
     end_date = forms.DateField(required=False)
-    description = forms.Textarea()
+    description = RichTextFormField(required=False)

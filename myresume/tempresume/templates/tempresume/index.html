@@ -25,6 +25,7 @@
                 {{ exp_form|crispy }}
             {% endfor %} -->
             {{ experience_formset|crispy }}
+            {{ experience_formset.media }}
         
         <!-- {{ education_formset.management_form }} -->
         <!-- {% for edu_form in education_formset %}
@@ -35,5 +36,6 @@
         
         {% csrf_token %}
         <input type="submit" value="dodaj">
+        
     </form>
 {% endblock %}

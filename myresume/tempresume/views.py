@@ -7,7 +7,9 @@ from django.contrib import messages
 from django.forms import formset_factory
 import json
 from django.views.decorators.http import require_POST
-
+from django.urls import reverse_lazy, reverse
+from django.template.loader import render_to_string
+import weasyprint
 # Create your views here
 
 r = StrictRedis(host=settings.REDIS_HOST,
@@ -40,14 +42,13 @@ def index(request):
             postal_code = personal_info_form.cleaned_data['postal_code']
             city = personal_info_form.cleaned_data['city']
 
-            data = {'Slug': str(CV_name + "/" + date_of_birth)
-                    'Personal_info': {'first_name': first_name, 
+            data = {'Personal_info': {'first_name': first_name, 
                                     'last_name': last_name, 
                                     'date_of_birth': date_of_birth,
                                     'address': address,
                                     'postal_code': postal_code,
                                     'city': city}
-            }
+                                    }
 
 
             # Experience
@@ -73,17 +74,22 @@ def index(request):
                 else:
                     end_date = None
 
+                if e.get('description'):
+                    description = str(e.get('description'))
+                else:
+                    description = None
+
                 data['Experience'][f'{index}'] = {'company': company,
                                                 'position': position,
                                                 'start_date': start_date,
                                                 'end_date': end_date,
-                                            # 'description': exp_form.cleaned_data['description'],
-                                            }
+                                                'description': description,
+                                                }
 
 
             data['Education'] = {}
 
-             
+            
             for index, edu_form in enumerate(education_formset):
                 e = edu_form.cleaned_data
                 # print(index, edu_form.cleaned_data)
@@ -107,26 +113,37 @@ def index(request):
                     end_date = str(e.get('end_date'))
                 else:
                     end_date = None
+
+                if e.get('description'):
+                    description = str(e.get('description'))
+                else:
+                    description = None
             
             
                 data['Education'][f'{index}'] = {'institution': institution,
                                                 'specialisation': specialisation,
                                                 'start_date': start_date,
                                                 'end_date': end_date,
-                                            # 'description': exp_form.cleaned_data['description'],
+                                                'description': description,
                                         }
     
             # print(data)
             
             rdict = json.dumps(data)
             r.set(f'{CV_name}/{date_of_birth}', rdict)
-            r.expire(f'{CV_name}/{date_of_birth}', 120)
+            r.expire(f'{CV_name}/{date_of_birth}', 1000)
             
-            data_from_redis = r.get(f'{CV_name}/{date_of_birth}')
-            results = json.loads(data_from_redis)
+            print(date_of_birth)
+            # data_from_redis = r.get(f'{CV_name}/{date_of_birth}')
+            # results = json.loads(data_from_redis)
 
-            print(results)
-            return redirect(request.path_info)
+            # print(results)
+            r_CV_name = personal_info_form.cleaned_data['CV_name']
+            r_date_of_birth = personal_info_form.cleaned_data['date_of_birth']
+            # slug = CV_name + "/" + date_of_birth
+            
+            return HttpResponseRedirect(reverse_lazy('tempresume:generate_pdf', args=[r_CV_name, r_date_of_birth]))
+            # return HttpResponseRedirect(request.path_info)
     else:
         print("witam")
         personal_info_form = PersonalInfoForm()
@@ -139,3 +156,39 @@ def index(request):
 
         
     return render(request, 'tempresume/index.html', {'personal_info_form': personal_info_form, 'experience_formset': experience_formset, 'education_formset': education_formset})
+
+
+
+def generate_pdf(request, r_CV_name, r_date_of_birth):
+    data_from_redis_json = r.get(f"{r_CV_name}/{r_date_of_birth}")
+    # Not generating but testing only
+    # data_from_redis = r.get(f'{slug}')
+    data = json.loads(data_from_redis_json)
+    print(data)
+
+    #Personal info
+    pi = data['Personal_info']
+    first_name = pi.get('first_name')
+    last_name = pi.get('last_name')
+    date_of_birth = pi.get('date_of_birth')
+    address = pi.get('address')
+    postal_code = pi.get('postal_code')
+    city = pi.get('city')
+
+    #Experience
+    exp = data['Experience']
+    
+    
+
+    html = render_to_string('tempresume/test.html', {'data': data, 
+                                                    'first_name': first_name,
+                                                    'last_name': last_name,
+                                                    'date_of_birth': date_of_birth,
+                                                    'address': address,
+                                                    'postal_code': postal_code,
+                                                    'city': city,
+                                                    'exp': exp})
+    response = HttpResponse(content_type='application/pdf')
+    weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response, stylesheets=[weasyprint.CSS(settings.STATIC_ROOT + 'tempresume/style.css')])
+    return response
+    # return render(request, 'tempresume/test.html', {})

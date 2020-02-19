@@ -1,0 +1,37 @@
+{% load static %}
+<html>
+    <head>
+            <style>
+                @page A4 {
+                    margin: 0;
+                }
+            </style>
+
+
+            <link rel="stylesheet" type="text/css" href="{% static 'tempresume/pdf.css' %}">
+    </head>
+    <body>
+
+        <h1>Hello world</h1>
+
+            <p>{{ first_name }}</p>
+            <p>{{ last_name }}</p>
+            <p>{{ date_of_birth }}</p>
+
+            <p>{% for key, values in exp.items  %}
+                    <!-- {{ values.company }} -->
+                    {% for k, v in values.items %}
+                        {{ values.company }}
+                        {{ values.start_date }}
+                        <!-- {% if v is not None %}
+                            {{ k }} {{ v|safe }} -->
+                            <br>
+                            
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+            </p>
+
+    </body>
+</html>
+
