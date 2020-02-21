@@ -5,6 +5,7 @@ class PersonalInfoForm(forms.Form):
     CV_name = forms.CharField(max_length=100, label="CV name")
     first_name = forms.CharField(max_length=50)
     last_name = forms.CharField(max_length=100)
+    current_position = forms.CharField(max_length=70, required=False)
     date_of_birth = forms.DateField()
     address = forms.CharField(max_length=250)
     postal_code = forms.CharField(max_length=10)

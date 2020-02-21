@@ -34,16 +34,20 @@ def index(request):
         if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid():
 
             #Personal Info
-            CV_name = personal_info_form.cleaned_data['CV_name']
-            first_name = personal_info_form.cleaned_data['first_name']
-            last_name = personal_info_form.cleaned_data['last_name']
-            date_of_birth = str(personal_info_form.cleaned_data['date_of_birth'])
-            address = str(personal_info_form.cleaned_data['address'])
-            postal_code = personal_info_form.cleaned_data['postal_code']
-            city = personal_info_form.cleaned_data['city']
+            pi_cd = personal_info_form.cleaned_data
+
+            CV_name = pi_cd['CV_name']
+            first_name = pi_cd['first_name']
+            last_name = pi_cd['last_name']
+            current_position = pi_cd['current_position']
+            date_of_birth = str(pi_cd['date_of_birth'])
+            address = str(pi_cd['address'])
+            postal_code = pi_cd['postal_code']
+            city = pi_cd['city']
 
             data = {'Personal_info': {'first_name': first_name, 
                                     'last_name': last_name, 
+                                    'current_position': current_position,
                                     'date_of_birth': date_of_birth,
                                     'address': address,
                                     'postal_code': postal_code,
@@ -131,7 +135,7 @@ def index(request):
             
             rdict = json.dumps(data)
             r.set(f'{CV_name}/{date_of_birth}', rdict)
-            r.expire(f'{CV_name}/{date_of_birth}', 1000)
+            r.expire(f'{CV_name}/{date_of_birth}', 10000)
             
             print(date_of_birth)
             # data_from_redis = r.get(f'{CV_name}/{date_of_birth}')
@@ -170,6 +174,7 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
     pi = data['Personal_info']
     first_name = pi.get('first_name')
     last_name = pi.get('last_name')
+    current_position = pi.get('current_position')
     date_of_birth = pi.get('date_of_birth')
     address = pi.get('address')
     postal_code = pi.get('postal_code')
@@ -183,12 +188,13 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
     html = render_to_string('tempresume/test.html', {'data': data, 
                                                     'first_name': first_name,
                                                     'last_name': last_name,
+                                                    'current_position': current_position,
                                                     'date_of_birth': date_of_birth,
                                                     'address': address,
                                                     'postal_code': postal_code,
                                                     'city': city,
                                                     'exp': exp})
     response = HttpResponse(content_type='application/pdf')
-    weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response, stylesheets=[weasyprint.CSS(settings.STATIC_ROOT + 'tempresume/style.css')])
+    weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response, stylesheets=[weasyprint.CSS(settings.STATIC_ROOT + 'tempresume/pdf.css')])
     return response
     # return render(request, 'tempresume/test.html', {})

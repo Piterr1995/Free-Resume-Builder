@@ -2,35 +2,47 @@
 <html>
     <head>
             <style>
-                @page A4 {
-                    margin: 0;
-                }
+                
             </style>
 
 
             <link rel="stylesheet" type="text/css" href="{% static 'tempresume/pdf.css' %}">
     </head>
     <body>
+        <div class="wrapper">
+            <div class="topbar">
+                <div class="topbar_left">
+                    <div class="name"><span class="first_name">{{ first_name|upper }}</span> <span class="last_name">{{ last_name|upper }}</span></div>
+                
+                </div>
+                <div class="topbar_right">asd</div>
+                <div style="clear: both"></div>
+                
+            </div>
+            <div class="personal_info_and_skills">
+                
+            </div>
+            <h1>Hello world</h1>
 
-        <h1>Hello world</h1>
+                <p>{{ first_name }}</p>
+                <p>{{ last_name }}</p>
+                <p>{{ date_of_birth }}</p>
 
-            <p>{{ first_name }}</p>
-            <p>{{ last_name }}</p>
-            <p>{{ date_of_birth }}</p>
-
-            <p>{% for key, values in exp.items  %}
-                    <!-- {{ values.company }} -->
-                    {% for k, v in values.items %}
-                        {{ values.company }}
-                        {{ values.start_date }}
-                        <!-- {% if v is not None %}
-                            {{ k }} {{ v|safe }} -->
-                            <br>
-                            
-                        {% endif %}
+                <p>{% for key, values in exp.items  %}
+                        <!-- {{ values.company }} -->
+                        {% for k, v in values.items %}
+                            {{ values.company }}
+                            {{ values.start_date }}
+                            <!-- {% if v is not None %}
+                                {{ k }} {{ v|safe }} -->
+                                <br>
+                                
+                            {% endif %}
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
-            </p>
+                </p>
+                <div class="test"></div>
+        </div>
 
     </body>
 </html>
