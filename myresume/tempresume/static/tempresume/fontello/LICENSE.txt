@@ -1,15 +1,6 @@
 Font license info
 
 
-## Font Awesome
-
-   Copyright (C) 2016 by Dave Gandy
-
-   Author:    Dave Gandy
-   License:   SIL ()
-   Homepage:  http://fortawesome.github.com/Font-Awesome/
-
-
 ## Elusive
 
    Copyright (C) 2013 by Aristeides Stathopoulos
@@ -17,6 +8,15 @@ Font license info
    Author:    Aristeides Stathopoulos
    License:   SIL (http://scripts.sil.org/OFL)
    Homepage:  http://aristeides.com/
+
+
+## Font Awesome
+
+   Copyright (C) 2016 by Dave Gandy
+
+   Author:    Dave Gandy
+   License:   SIL ()
+   Homepage:  http://fortawesome.github.com/Font-Awesome/
 
 
 ## Entypo
@@ -28,21 +28,30 @@ Font license info
    Homepage:  http://www.entypo.com
 
 
-## Web Symbols
+## Iconic
 
-   Copyright (c) 2011 by Just Be Nice studio. All rights reserved.
+   Copyright (C) 2012 by P.J. Onori
 
-   Author:    Just Be Nice studio
+   Author:    P.J. Onori
    License:   SIL (http://scripts.sil.org/OFL)
-   Homepage:  http://www.justbenicestudio.com/
+   Homepage:  http://somerandomdude.com/work/iconic/
 
 
-## Typicons
+## Modern Pictograms
 
-   (c) Stephen Hutchings 2012
+   Copyright (c) 2012 by John Caserta. All rights reserved.
 
-   Author:    Stephen Hutchings
+   Author:    John Caserta
    License:   SIL (http://scripts.sil.org/OFL)
-   Homepage:  http://typicons.com/
+   Homepage:  http://thedesignoffice.org/project/modern-pictograms/
+
+
+## MFG Labs
+
+   Copyright (C) 2012 by Daniel Bruce
+
+   Author:    MFG Labs
+   License:   SIL (http://scripts.sil.org/OFL)
+   Homepage:  http://www.mfglabs.com/
 
 

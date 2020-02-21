@@ -3,12 +3,12 @@ from ckeditor.fields import RichTextFormField
 
 class PersonalInfoForm(forms.Form):
     CV_name = forms.CharField(max_length=100, label="CV name")
-    first_name = forms.CharField(max_length=50)
-    last_name = forms.CharField(max_length=100)
+    first_name = forms.CharField(max_length=50, label="First name")
+    last_name = forms.CharField(max_length=100, label="Last name")
     current_position = forms.CharField(max_length=70, required=False)
     mobile = forms.CharField(max_length=20)
     email = forms.EmailField(max_length=70)
-    date_of_birth = forms.DateField()
+    date_of_birth = forms.DateField(label="Date of birth")
     address = forms.CharField(max_length=250)
     postal_code = forms.CharField(max_length=10)
     city = forms.CharField(max_length=100)
