@@ -40,6 +40,8 @@ def index(request):
             first_name = pi_cd['first_name']
             last_name = pi_cd['last_name']
             current_position = pi_cd['current_position']
+            mobile = pi_cd['mobile']
+            email = pi_cd['email']
             date_of_birth = str(pi_cd['date_of_birth'])
             address = str(pi_cd['address'])
             postal_code = pi_cd['postal_code']
@@ -48,6 +50,8 @@ def index(request):
             data = {'Personal_info': {'first_name': first_name, 
                                     'last_name': last_name, 
                                     'current_position': current_position,
+                                    'mobile': mobile,
+                                    'email': email,                                    
                                     'date_of_birth': date_of_birth,
                                     'address': address,
                                     'postal_code': postal_code,
@@ -175,6 +179,8 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
     first_name = pi.get('first_name')
     last_name = pi.get('last_name')
     current_position = pi.get('current_position')
+    mobile = pi.get('mobile')
+    email = pi.get('email')
     date_of_birth = pi.get('date_of_birth')
     address = pi.get('address')
     postal_code = pi.get('postal_code')
@@ -189,6 +195,8 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
                                                     'first_name': first_name,
                                                     'last_name': last_name,
                                                     'current_position': current_position,
+                                                    'mobile': mobile,
+                                                    'email': email,
                                                     'date_of_birth': date_of_birth,
                                                     'address': address,
                                                     'postal_code': postal_code,

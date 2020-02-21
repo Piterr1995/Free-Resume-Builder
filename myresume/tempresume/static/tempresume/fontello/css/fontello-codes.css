@@ -1,0 +1,26 @@
+
+.icon-calendar:before { content: '\e800'; } /* '' */
+.icon-mail:before { content: '\e801'; } /* '' */
+.icon-mail-1:before { content: '\e802'; } /* '' */
+.icon-phone:before { content: '\e803'; } /* '' */
+.icon-mobile:before { content: '\e804'; } /* '' */
+.icon-ok-circled:before { content: '\e805'; } /* '' */
+.icon-ok-circled2:before { content: '\e806'; } /* '' */
+.icon-ok-circle:before { content: '\e807'; } /* '' */
+.icon-suitcase:before { content: '\e808'; } /* '' */
+.icon-briefcase:before { content: '\e809'; } /* '' */
+.icon-globe:before { content: '\e80a'; } /* '' */
+.icon-record:before { content: '\e80b'; } /* '' */
+.icon-home:before { content: '\e80c'; } /* '' */
+.icon-home-outline:before { content: '\e80d'; } /* '' */
+.icon-graduation-cap-1:before { content: '\e80e'; } /* '' */
+.icon-book:before { content: '\e80f'; } /* '' */
+.icon-mail-alt:before { content: '\f0e0'; } /* '' */
+.icon-circle-empty:before { content: '\f10c'; } /* '' */
+.icon-circle:before { content: '\f111'; } /* '' */
+.icon-bank:before { content: '\f19c'; } /* '' */
+.icon-graduation-cap:before { content: '\f19d'; } /* '' */
+.icon-circle-thin:before { content: '\f1db'; } /* '' */
+.icon-address-book:before { content: '\f2b9'; } /* '' */
+.icon-address-card:before { content: '\f2bb'; } /* '' */
+.icon-address-card-o:before { content: '\f2bc'; } /* '' */

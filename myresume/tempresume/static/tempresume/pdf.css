@@ -47,9 +47,10 @@
   .name {
     font-family: 'Montserrat';
     margin-left: 20px;
-    margin-top: 10px;
-    font-size: 2.2em;
+    margin-top: 20px;
+    font-size: 2em;
     color: rgb(27, 21, 100);
+    line-height: 0.8em;
     
     
   }
@@ -60,4 +61,17 @@
 
   .last_name {
     font-weight: 500;
+  }
+
+  .current_position {
+    font-size: 0.6em;
+  }
+
+  .topbar_right {
+    text-align: right;
+  }
+
+  .contact_details {
+    margin-top: 10px;
+    margin-right: 5px;
   }

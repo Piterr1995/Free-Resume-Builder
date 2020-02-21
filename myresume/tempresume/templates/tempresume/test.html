@@ -7,15 +7,27 @@
 
 
             <link rel="stylesheet" type="text/css" href="{% static 'tempresume/pdf.css' %}">
+            <link rel="stylesheet" type="text/css" href="{% static 'tempresume/fontello/css/fontello.css' %}">
     </head>
     <body>
         <div class="wrapper">
             <div class="topbar">
                 <div class="topbar_left">
-                    <div class="name"><span class="first_name">{{ first_name|upper }}</span> <span class="last_name">{{ last_name|upper }}</span></div>
+                    <div class="name">
+                        <span class="first_name">{{ first_name|upper }}</span> <span class="last_name">{{ last_name|upper }}</span><br>
+                        <span class="current_position">{{ current_position|title }}</span>
+                        
+                    </div>
                 
                 </div>
-                <div class="topbar_right">asd</div>
+                <div class="topbar_right">
+                    <div class="contact_details">
+                        <div>{{ mobile }} <i style="background-color: blue;" class="icon-phone"></i></div>
+                        <div>{{ email }}</div>
+                    </div>
+                    
+                   
+                </div>
                 <div style="clear: both"></div>
                 
             </div>
