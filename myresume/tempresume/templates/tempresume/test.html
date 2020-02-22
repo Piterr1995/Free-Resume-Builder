@@ -25,18 +25,66 @@
                         <div>{{ mobile }} <i  class="icon-phone-circled"></i></div>
                         <div>{{ email }} <i class="icon-mail-circled"></i></div>
                         <div>{{ address }} <i class="icon-home-circled"></i></div>
-                        <div>{{ postal_code }} {{ city }} <i style="color: white" class="icon-home-circled"></i></div>
-                    </div>
-                    
+                        <div>{{ postal_code }}, {{ city }} <i style="color: white" class="icon-home-circled"></i></div>
+                    </div>               
                    
                 </div>
                 <div style="clear: both"></div>
                 
             </div>
-            <div class="personal_info_and_skills">
-                
+            
+            <div class="left_color_box">
+                asd
             </div>
-            <h1>Hello world</h1>
+
+            <div class="experience_and_education">
+                
+                <div class="experience_box">
+                    
+                    <div class="label">PROFESSIONAL EXPERIENCE</div>
+                    <div class="experience">
+                        {% for key, values in exp.items  %}
+                        
+                        <div class="company_name_and_position">
+                            {% if values.company != None %}
+                            <div class="company">{{ values.company|upper }}</div>
+                            {% endif %}
+
+                            {% if values.position != None %}
+                            <div class="position">{{ values.position|title }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="experience_duration">
+                            {% if values.start_date != None %}
+                                {{ values.start_date }} -
+                            {% endif %}
+
+                            {% if values.end_date != None %}
+                                {{ values.end_date }}
+                            {% else %}
+                                {% if values.start_date != None %} 
+                                    now
+                                {% endif %} 
+                            {% endif %}</div>
+                        <div style="clear: both"></div>
+                        <div class="experience_description">
+                            {% if values.description != None%}
+                                {{ values.description|safe }}
+                            {% endif %}
+                        </div>
+                        <br>
+
+                        
+    
+                                
+                                
+                                
+                        {% endfor %}
+                        
+                    </div>
+                    <div style="clear: both"></div>
+                </div>
+                <h1>Hello world</h1>
 
                 <p>{{ first_name }}</p>
                 <p>{{ last_name }}</p>
@@ -55,7 +103,10 @@
                         {% endfor %}
                     {% endfor %}
                 </p>
-                <div class="test"></div>
+                
+            </div>
+            <div style="clear: both;"></div>
+            
         </div>
 
     </body>

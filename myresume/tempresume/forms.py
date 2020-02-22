@@ -15,6 +15,7 @@ class PersonalInfoForm(forms.Form):
 
 class ExperienceForm(forms.Form):
     company = forms.CharField(max_length=100, required=False)
+    # job_location = forms.CharField(max_length=100, required=False)
     position = forms.CharField(max_length=100, required=False)
     start_date = forms.DateField(required=False, widget=forms.SelectDateWidget)
     end_date = forms.DateField(required=False, widget=forms.SelectDateWidget) 
