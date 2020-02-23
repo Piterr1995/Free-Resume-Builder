@@ -25,7 +25,7 @@
                         <div>{{ mobile }} <i  class="icon-phone-circled"></i></div>
                         <div>{{ email }} <i class="icon-mail-circled"></i></div>
                         <div>{{ address }} <i class="icon-home-circled"></i></div>
-                        <div>{{ postal_code }}, {{ city }} <i style="color: white" class="icon-home-circled"></i></div>
+                        <div>{{ postal_code }}, {{ city|title }} <i style="color: white" class="icon-home-circled"></i></div>
                     </div>               
                    
                 </div>
@@ -89,11 +89,11 @@
                             
                             <div class="company_name_and_position">
                                 {% if values.institution != None %}
-                                <div class="company_or_institution">{{ values.company|upper }}</div>
+                                <div class="company_or_institution">{{ values.institution|upper }}</div>
                                 {% endif %}
     
                                 {% if values.specialisation != None %}
-                                <div class="position_or_specialisation">{{ values.position|title }}</div>
+                                <div class="position_or_specialisation">{{ values.specialisation|title }}</div>
                                 {% endif %}
                             </div>
                             <div class="experience_or_education_duration">

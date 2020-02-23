@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import PersonalInfoForm, ExperienceForm, EducationForm
+from .forms import PersonalInfoForm, ExperienceForm, EducationForm, SkillForm
 from django.http import HttpResponse, HttpResponseRedirect
 from redis import StrictRedis
 from django.conf import settings
@@ -20,6 +20,7 @@ r = StrictRedis(host=settings.REDIS_HOST,
 def index(request):
     ExperienceFormset = formset_factory(ExperienceForm, extra=9)
     EducationFormset = formset_factory(EducationForm, extra=4)
+    SkillFormset = formset_factory(SkillForm, extra=9)
     
     if request.method == "POST":
         #Personal info Form
@@ -31,7 +32,10 @@ def index(request):
         #Education formsset
         education_formset = EducationFormset(request.POST, prefix='education')
 
-        if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid():
+        #Skills formset
+        skill_formset = SkillFormset(request.POST, prefix="skill")
+
+        if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid() and skill_formset.is_valid():
 
             #Personal Info
             pi_cd = personal_info_form.cleaned_data
@@ -63,29 +67,27 @@ def index(request):
             data["Experience"] = {}
 
             for index, exp_form in enumerate(experience_formset):
+                # Assigning a variable to easily get data from forms
                 e = exp_form.cleaned_data
-                # print(exp_form.cleaned_data.get('company'))
-                if e.get('company'):
-                    company = str(e.get('company'))
-                else:
-                    company = None
-                if e.get('position'):
-                    position = str(e.get('position'))
-                else:
-                    position = None
-                if e.get('start_date'):
-                    start_date = str(e.get('start_date'))
-                else:
-                    start_date = None
-                if e.get('end_date'):
-                    end_date = str(e.get('end_date'))
-                else:
-                    end_date = None
-
-                if e.get('description'):
-                    description = str(e.get('description'))
-                else:
-                    description = None
+                
+                # Fields from cleaned data dictionary
+                fields = ['company', 'position', 'start_date', 'end_date', 'description']
+                
+                #Here we will add values for each of above fields
+                exp_variables = []
+                
+                for field in fields:
+                    if e.get(field):
+                        exp_variables.append(str(e.get(field)))
+                    else:
+                        exp_variables.append(None)
+                
+                # print(edu_variables)
+                company = exp_variables[0]
+                position = exp_variables[1]
+                start_date = exp_variables[2]
+                end_date = exp_variables[3]
+                description = exp_variables[4]
 
                 data['Experience'][f'{index}'] = {'company': company,
                                                 'position': position,
@@ -95,40 +97,31 @@ def index(request):
                                                 }
 
 
+
             data['Education'] = {}
 
-            
             for index, edu_form in enumerate(education_formset):
+                # Assigning a variable to easily get data from forms
                 e = edu_form.cleaned_data
-                # print(index, edu_form.cleaned_data)
                 
-                fields = ['institution', 'specialisation', 'start_date', 'end_date']
+                # Fields from cleaned data dictionary
+                fields = ['institution', 'specialisation', 'start_date', 'end_date', 'description']
+                
+                #Here we will add values for each of above fields
+                edu_variables = []
+                
                 for field in fields:
-                    if e.get('institution'):
-                        institution = str(e.get('institution'))
+                    if e.get(field):
+                        edu_variables.append(str(e.get(field)))
                     else:
-                        institution = None
-                    
-                    if e.get('specialisation'):
-                        specialisation = str(e.get('specialisation'))
-                    else:
-                        specialisation = None
-
-                    if e.get('start_date'):
-                        start_date = str(e.get('start_date'))
-                    else:
-                        start_date = None
-                    
-                    if e.get('end_date'):
-                        end_date = str(e.get('end_date'))
-                    else:
-                        end_date = None
-
-                    if e.get('description'):
-                        description = str(e.get('description'))
-                    else:
-                        description = None
-            
+                        edu_variables.append(None)
+                
+                # print(edu_variables)
+                institution = edu_variables[0]
+                specialisation = edu_variables[1]
+                start_date = edu_variables[2]
+                end_date = edu_variables[3]
+                description = edu_variables[4]
             
                 data['Education'][f'{index}'] = {'institution': institution,
                                                 'specialisation': specialisation,
@@ -136,7 +129,24 @@ def index(request):
                                                 'end_date': end_date,
                                                 'description': description,
                                         }
-    
+
+            data['Skill'] = {}
+            for index, skill_form in enumerate(skill_formset):
+                s = skill_form.cleaned_data
+
+                if s.get('skill') and s.get('rating'):
+                    skill = s.get('skill')
+                    rating = int(s.get('rating'))
+                else:
+                    skill = None
+                    rating = None
+
+                data['Skill'][f'{index}'] = {
+                                            'skill': skill,
+                                            'rating': rating
+                }
+
+
             # print(data)
             
             rdict = json.dumps(data)
@@ -164,8 +174,11 @@ def index(request):
         # EducationFormset = formset_factory(EducationForm, extra=4)
         education_formset = EducationFormset(prefix='education')
 
+        #SkillFormset
+        skill_formset = SkillFormset(prefix="skill")
+
         
-    return render(request, 'tempresume/index.html', {'personal_info_form': personal_info_form, 'experience_formset': experience_formset, 'education_formset': education_formset})
+    return render(request, 'tempresume/index.html', {'personal_info_form': personal_info_form, 'experience_formset': experience_formset, 'education_formset': education_formset, 'skill_formset': skill_formset})
 
 
 
