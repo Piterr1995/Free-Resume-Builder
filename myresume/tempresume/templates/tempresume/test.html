@@ -39,22 +39,22 @@
 
             <div class="experience_and_education">
                 
-                <div class="experience_box">
+                <div class="data_box experience_box">
                     
                     <div class="label">PROFESSIONAL EXPERIENCE</div>
-                    <div class="experience">
+                    <div class="data">
                         {% for key, values in exp.items  %}
                         
                         <div class="company_name_and_position">
                             {% if values.company != None %}
-                            <div class="company">{{ values.company|upper }}</div>
+                            <div class="company_or_institution company">{{ values.company|upper }}</div>
                             {% endif %}
 
                             {% if values.position != None %}
-                            <div class="position">{{ values.position|title }}</div>
+                            <div class="position_or_specialisation position">{{ values.position|title }}</div>
                             {% endif %}
                         </div>
-                        <div class="experience_duration">
+                        <div class="experience_or_education_duration experience">
                             {% if values.start_date != None %}
                                 {{ values.start_date }} -
                             {% endif %}
@@ -65,44 +65,63 @@
                                 {% if values.start_date != None %} 
                                     now
                                 {% endif %} 
-                            {% endif %}</div>
-                        <div style="clear: both"></div>
-                        <div class="experience_description">
-                            {% if values.description != None%}
-                                {{ values.description|safe }}
                             {% endif %}
                         </div>
-                        <br>
-
-                        
-    
-                                
-                                
-                                
+                        <div style="clear: both"></div>
+                        <div class="experience_or_education_description experience_description">
+                            {% if values.description != None %}
+                                {{ values.description|safe }}
+                                <br>
+                            {% endif %}
+                        </div>
+                                     
                         {% endfor %}
+                         
                         
                     </div>
-                    <div style="clear: both"></div>
-                </div>
-                <h1>Hello world</h1>
+                    <br> 
 
-                <p>{{ first_name }}</p>
-                <p>{{ last_name }}</p>
-                <p>{{ date_of_birth }}</p>
-
-                <p>{% for key, values in exp.items  %}
-                        <!-- {{ values.company }} -->
-                        {% for k, v in values.items %}
-                            {{ values.company }}
-                            {{ values.start_date }}
-                            <!-- {% if v is not None %}
-                                {{ k }} {{ v|safe }} -->
-                                <br>
-                                
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                </p>
+                    <div class="data_box education_box">
+                    
+                        <div class="label">EDUCATION</div>
+                        <div class="data">
+                            {% for key, values in edu.items  %}
+                            
+                            <div class="company_name_and_position">
+                                {% if values.institution != None %}
+                                <div class="company_or_institution">{{ values.company|upper }}</div>
+                                {% endif %}
+    
+                                {% if values.specialisation != None %}
+                                <div class="position_or_specialisation">{{ values.position|title }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="experience_or_education_duration">
+                                {% if values.start_date != None %}
+                                    {{ values.start_date }} -
+                                {% endif %}
+    
+                                {% if values.end_date != None %}
+                                    {{ values.end_date }}
+                                {% else %}
+                                    {% if values.start_date != None %} 
+                                        now
+                                    {% endif %} 
+                                {% endif %}
+                            </div>
+                            <div style="clear: both"></div>
+                            <div class="experience_or_education_description">
+                                {% if values.description != None %}
+                                    {{ values.description|safe }}
+                                {% endif %}
+                            </div>
+                                                
+                            {% endfor %}
+                            
+                        </div>
+                    
+         
+               
                 
             </div>
             <div style="clear: both;"></div>

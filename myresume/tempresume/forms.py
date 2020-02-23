@@ -27,3 +27,15 @@ class EducationForm(forms.Form):
     start_date = forms.DateField(required=False)
     end_date = forms.DateField(required=False)
     description = RichTextFormField(required=False)
+
+class SkillForm(forms.Form):
+    CHOICES = (
+        ('1', 1),
+        ('2', 2),
+        ('3', 3),
+        ('4', 4),
+        ('5', 5)
+    )
+    skill = forms.CharField(max_length=30, required=False)
+    if not self.skill:
+        rating = forms.TypedChoiceField(choices=CHOICES, required=False)

@@ -102,30 +102,32 @@ def index(request):
                 e = edu_form.cleaned_data
                 # print(index, edu_form.cleaned_data)
                 
-                if e.get('institution'):
-                    institution = str(e.get('institution'))
-                else:
-                    institution = None
-                
-                if e.get('specialisation'):
-                    specialisation = str(e.get('specialisation'))
-                else:
-                    specialisation = None
+                fields = ['institution', 'specialisation', 'start_date', 'end_date']
+                for field in fields:
+                    if e.get('institution'):
+                        institution = str(e.get('institution'))
+                    else:
+                        institution = None
+                    
+                    if e.get('specialisation'):
+                        specialisation = str(e.get('specialisation'))
+                    else:
+                        specialisation = None
 
-                if e.get('start_date'):
-                    start_date = str(e.get('start_date'))
-                else:
-                    start_date = None
-                
-                if e.get('end_date'):
-                    end_date = str(e.get('end_date'))
-                else:
-                    end_date = None
+                    if e.get('start_date'):
+                        start_date = str(e.get('start_date'))
+                    else:
+                        start_date = None
+                    
+                    if e.get('end_date'):
+                        end_date = str(e.get('end_date'))
+                    else:
+                        end_date = None
 
-                if e.get('description'):
-                    description = str(e.get('description'))
-                else:
-                    description = None
+                    if e.get('description'):
+                        description = str(e.get('description'))
+                    else:
+                        description = None
             
             
                 data['Education'][f'{index}'] = {'institution': institution,
@@ -189,7 +191,7 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
     #Experience
     exp = data['Experience']
     
-    
+    edu = data['Education']
 
     html = render_to_string('tempresume/test.html', {'data': data, 
                                                     'first_name': first_name,
@@ -201,7 +203,9 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
                                                     'address': address,
                                                     'postal_code': postal_code,
                                                     'city': city,
-                                                    'exp': exp})
+                                                    'exp': exp,
+                                                    'edu': edu,
+                                                    })
     response = HttpResponse(content_type='application/pdf')
     weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response, stylesheets=[weasyprint.CSS(settings.STATIC_ROOT + 'tempresume/pdf.css')])
     return response
