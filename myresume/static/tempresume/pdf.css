@@ -152,3 +152,9 @@
     text-align: justify;
     font-size: 0.8em;
   }
+
+  .skill_and_rating {
+    width: 50%;
+    float: left;
+    border: 1px solid black;
+  }

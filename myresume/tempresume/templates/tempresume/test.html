@@ -39,6 +39,7 @@
 
             <div class="experience_and_education">
                 
+                {% if company_exists %}
                 <div class="data_box experience_box">
                     
                     <div class="label">PROFESSIONAL EXPERIENCE</div>
@@ -79,55 +80,86 @@
                          
                         
                     </div>
-                    <br> 
-
-                    <div class="data_box education_box">
-                    
-                        <div class="label">EDUCATION</div>
-                        <div class="data">
-                            {% for key, values in edu.items  %}
-                            
-                            <div class="company_name_and_position">
-                                {% if values.institution != None %}
-                                <div class="company_or_institution">{{ values.institution|upper }}</div>
-                                {% endif %}
-    
-                                {% if values.specialisation != None %}
-                                <div class="position_or_specialisation">{{ values.specialisation|title }}</div>
-                                {% endif %}
-                            </div>
-                            <div class="experience_or_education_duration">
-                                {% if values.start_date != None %}
-                                    {{ values.start_date }} -
-                                {% endif %}
-    
-                                {% if values.end_date != None %}
-                                    {{ values.end_date }}
-                                {% else %}
-                                    {% if values.start_date != None %} 
-                                        now
-                                    {% endif %} 
-                                {% endif %}
-                            </div>
-                            <div style="clear: both"></div>
-                            <div class="experience_or_education_description">
-                                {% if values.description != None %}
-                                    {{ values.description|safe }}
-                                {% endif %}
-                            </div>
-                                                
-                            {% endfor %}
-                            
-                        </div>
-                    
-         
-               
+                </div>
+                <br>
+                {% endif %}
+                     
+                {% if institution_exists %}
+                <div class="data_box education_box">
                 
-            </div>
+                    <div class="label">EDUCATION</div>
+                    <div class="data">
+                        {% for key, values in edu.items  %}
+                        
+                        <div class="company_name_and_position">
+                            {% if values.institution != None %}
+                            <div class="company_or_institution">{{ values.institution|upper }}</div>
+                            {% endif %}
+
+                            {% if values.specialisation != None %}
+                            <div class="position_or_specialisation">{{ values.specialisation|title }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="experience_or_education_duration">
+                            {% if values.start_date != None %}
+                                {{ values.start_date }} -
+                            {% endif %}
+
+                            {% if values.end_date != None %}
+                                {{ values.end_date }}
+                            {% else %}
+                                {% if values.start_date != None %} 
+                                    now
+                                {% endif %} 
+                            {% endif %}
+                        </div>
+                        <div style="clear: both"></div>
+                        <div class="experience_or_education_description">
+                            {% if values.description != None %}
+                                {{ values.description|safe }}
+                            {% endif %}
+                        </div>
+                                            
+                        {% endfor %}
+                        
+                    </div>                  
+                          
+                </div>
+                <br>
+                
+                {% endif %}
+
+
+                <div class="data_box skill_box">
+                    <div class="label">ADDITIONAL SKILLS</div>
+                    {% for key, values in ski.items  %}
+                            
+                            <div class="skill_and_rating">
+                                <span class="skill">{{ values.skill }}</span><span class="rating">{{ values.rating }}</span>
+                            </div>
+                    {% endfor %}
+                </div>
+                <!-- Skills -->
+                <!-- {% if skill_and_rating_exists %} -->
+                <div class="data_box skill_box">
+                    <div style="height: 200px; width: 200px; background-color:yellow;"></div>
+                    <div class="label">ADDITIONAL SKILLS</div>
+                    <div class="data" style="width: 200px; height: 200px; background-color: blue;">
+                        {% for key, values in ski.items  %}
+                        {{ values }}
+                        <div class="skill_and_rating">
+                            <span class="skill">{{ values.skill }}</span><span class="rating">{{ values.rating }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                        
+                <!-- {% endif %} -->
+                </div>
             <div style="clear: both;"></div>
             
-        </div>
-
+                
+            </div>
+            
     </body>
 </html>
 

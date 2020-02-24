@@ -66,10 +66,13 @@ def index(request):
             # Experience
             data["Experience"] = {}
 
+            
+
             for index, exp_form in enumerate(experience_formset):
                 # Assigning a variable to easily get data from forms
                 e = exp_form.cleaned_data
-                
+
+                   
                 # Fields from cleaned data dictionary
                 fields = ['company', 'position', 'start_date', 'end_date', 'description']
                 
@@ -147,6 +150,9 @@ def index(request):
                 }
 
 
+            #Checking the data to display or not labels for them
+            
+
             # print(data)
             
             rdict = json.dumps(data)
@@ -203,8 +209,42 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
 
     #Experience
     exp = data['Experience']
-    
+
+    #A variable made to check, whether pdf label should be displayed or not
+    company_exists = False
+    for item in exp.values():
+        if item['company']:
+            company_exists = True
+    print(company_exists)
+
+
+    #Education
     edu = data['Education']
+
+    #A variable made to check, whether pdf label should be displayed or not
+    institution_exists = False
+    for item in edu.values():
+        if item['institution']:
+            institution_exists = True
+    print(institution_exists)
+
+    #Skills
+    ski = data['Skill']
+    #A variable made to check, whether pdf label should be displayed or not
+    skill_and_vote_exists = False
+    for item in ski.values():
+        if item['skill'] and item['rating']:
+            skill_and_vote_exists = True
+    print(skill_and_vote_exists)
+
+
+    # 
+    # company_exists = False
+
+    #  #Checking if company exists for pdf label purposes
+    # if e.get('company'):
+    #     company_exists = True
+    #     continue
 
     html = render_to_string('tempresume/test.html', {'data': data, 
                                                     'first_name': first_name,
@@ -217,8 +257,16 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
                                                     'postal_code': postal_code,
                                                     'city': city,
                                                     'exp': exp,
+                                                    'company_exists': company_exists,
                                                     'edu': edu,
+                                                    'institution_exists': institution_exists,
+                                                    'ski': ski,
+                                                    'skill_and_vote_exists': skill_and_vote_exists,
+                                                
+
                                                     })
+
+
     response = HttpResponse(content_type='application/pdf')
     weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response, stylesheets=[weasyprint.CSS(settings.STATIC_ROOT + 'tempresume/pdf.css')])
     return response
