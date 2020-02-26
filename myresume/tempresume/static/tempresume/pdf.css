@@ -152,3 +152,24 @@
     text-align: justify;
     font-size: 0.8em;
   }
+
+  .skill_and_rating {
+    box-sizing: border-box;
+    width: 50%;
+    float: left;
+    padding-right: 3px;
+    
+    
+  }
+
+  .skill {
+    width: 50%;
+  }
+
+  .rating {
+    width: 50%;
+    text-align: right;
+    float: right;
+    padding-right: 3px;
+    
+  }

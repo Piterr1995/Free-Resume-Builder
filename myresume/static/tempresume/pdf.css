@@ -154,7 +154,22 @@
   }
 
   .skill_and_rating {
+    box-sizing: border-box;
     width: 50%;
     float: left;
-    border: 1px solid black;
+    
+    
+    
+  }
+
+  .skill {
+    width: 50%;
+  }
+
+  .rating {
+    width: 50%;
+    text-align: right;
+    float: right;
+    padding-right: 3px;
+    
   }

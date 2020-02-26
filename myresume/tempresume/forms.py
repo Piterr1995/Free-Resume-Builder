@@ -38,3 +38,8 @@ class SkillForm(forms.Form):
     )
     skill = forms.CharField(max_length=30, required=False)
     rating = forms.TypedChoiceField(choices=CHOICES, required=False)
+
+class LicensesAndCertificationsForm(forms.Form):
+    name = forms.CharField(max_length=50, required=False, label="License or certificate name")
+    date_finished = forms.DateField(required=False, label="Date finished")
+ 

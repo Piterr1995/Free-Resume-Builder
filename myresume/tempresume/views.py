@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import PersonalInfoForm, ExperienceForm, EducationForm, SkillForm
+from .forms import PersonalInfoForm, ExperienceForm, EducationForm, SkillForm, LicensesAndCertificationsForm
 from django.http import HttpResponse, HttpResponseRedirect
 from redis import StrictRedis
 from django.conf import settings
@@ -21,6 +21,7 @@ def index(request):
     ExperienceFormset = formset_factory(ExperienceForm, extra=9)
     EducationFormset = formset_factory(EducationForm, extra=4)
     SkillFormset = formset_factory(SkillForm, extra=9)
+    LicensesAndCertificationsFormset = formset_factory(LicensesAndCertificationsForm, extra=7)
     
     if request.method == "POST":
         #Personal info Form
@@ -35,7 +36,11 @@ def index(request):
         #Skills formset
         skill_formset = SkillFormset(request.POST, prefix="skill")
 
-        if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid() and skill_formset.is_valid():
+        #Licenses and Certifications formset
+        licenses_and_certifications_formset = LicensesAndCertificationsFormset(request.POST, prefix="license_or_cerfiticate")
+
+
+        if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid() and skill_formset.is_valid() and licenses_and_certifications_formset.is_valid():
 
             #Personal Info
             pi_cd = personal_info_form.cleaned_data
@@ -133,6 +138,7 @@ def index(request):
                                                 'description': description,
                                         }
 
+            #Skills and ratings
             data['Skill'] = {}
             for index, skill_form in enumerate(skill_formset):
                 s = skill_form.cleaned_data
@@ -150,7 +156,23 @@ def index(request):
                 }
 
 
-            #Checking the data to display or not labels for them
+            #Licenses and certifications
+            data['Licenses_and_certifications'] = {}
+            for index, license_form in enumerate(licenses_and_certifications_formset):
+                l = license_form.cleaned_data
+
+                if l.get('name') and l.get('date_finished'):
+                    name = l.get('skill')
+                    date_finished = str(s.get('date_finished'))
+                else:
+                    name = None
+                    date_finished = None
+
+                data['Licenses_and_certifications'][f'{index}'] = {
+                                            'name': name,
+                                            'end_date': date_finished
+                                            }
+
             
 
             # print(data)
@@ -183,8 +205,15 @@ def index(request):
         #SkillFormset
         skill_formset = SkillFormset(prefix="skill")
 
+        #Licenses and Certifications Formset
+        licenses_and_certifications_formset = LicensesAndCertificationsFormset(prefix="license_or_certification")
+
         
-    return render(request, 'tempresume/index.html', {'personal_info_form': personal_info_form, 'experience_formset': experience_formset, 'education_formset': education_formset, 'skill_formset': skill_formset})
+    return render(request, 'tempresume/index.html', {'personal_info_form': personal_info_form, 
+                                                    'experience_formset': experience_formset, 
+                                                    'education_formset': education_formset, 
+                                                    'skill_formset': skill_formset, 
+                                                    'licenses_and_certification_formset': licenses_and_certifications_formset})
 
 
 
@@ -212,6 +241,8 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
 
     #A variable made to check, whether pdf label should be displayed or not
     company_exists = False
+    
+
     for item in exp.values():
         if item['company']:
             company_exists = True
@@ -238,6 +269,17 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
     print(skill_and_vote_exists)
 
 
+    #Licenses and certifications
+       
+    lic = data['Licenses_and_certifications']
+    #A variable made to check, whether pdf label should be displayed or not
+    license_and_finished_date_exists = False
+    
+    for item in lic.values():
+        if item['name'] and item['date_finished']:
+            license_and_finished_date_exists = True
+    print(license_and_finished_date_exists)
+
     # 
     # company_exists = False
 
@@ -262,6 +304,8 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
                                                     'institution_exists': institution_exists,
                                                     'ski': ski,
                                                     'skill_and_vote_exists': skill_and_vote_exists,
+                                                    'lic': lic,
+                                                    'license_and_finished_date_exists': license_and_finished_date_exists,
                                                 
 
                                                     })

@@ -1,4 +1,5 @@
 {% load static %}
+{% load my_tags %}
 <html>
     <head>
             <style>
@@ -132,29 +133,26 @@
 
                 <div class="data_box skill_box">
                     <div class="label">ADDITIONAL SKILLS</div>
-                    {% for key, values in ski.items  %}
-                            
-                            <div class="skill_and_rating">
-                                <span class="skill">{{ values.skill }}</span><span class="rating">{{ values.rating }}</span>
-                            </div>
-                    {% endfor %}
-                </div>
-                <!-- Skills -->
-                <!-- {% if skill_and_rating_exists %} -->
-                <div class="data_box skill_box">
-                    <div style="height: 200px; width: 200px; background-color:yellow;"></div>
-                    <div class="label">ADDITIONAL SKILLS</div>
-                    <div class="data" style="width: 200px; height: 200px; background-color: blue;">
+                    <div class="data">
                         {% for key, values in ski.items  %}
-                        {{ values }}
-                        <div class="skill_and_rating">
-                            <span class="skill">{{ values.skill }}</span><span class="rating">{{ values.rating }}</span>
-                        </div>
+                            {% if values.skill is not None and values.rating is not None%}
+                            <div class="skill_and_rating">
+                                <span class="skill">{{ values.skill }}</span>
+                                <span class="rating">
+                                    {% for rating in values.rating|times %}
+                                        <i class="icon-star"></i>
+                                    {% endfor %}
+                                    
+                                </span>
+                                
+                            </div>
+                            {% endif %}
                         {% endfor %}
                     </div>
-                        
-                <!-- {% endif %} -->
+                    
                 </div>
+
+
             <div style="clear: both;"></div>
             
                 
