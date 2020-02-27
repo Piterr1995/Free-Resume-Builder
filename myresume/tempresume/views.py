@@ -251,7 +251,7 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
 
 
 
-    def exists(_dict: Dict[str, Any], key_1, key_2=None):
+    def exists(_dict: Dict[str, Any], key_1, key_2=None) -> bool:
         if key_2:
             for index, item in enumerate(_dict.values()):
                 if item.get(key_1) and item.get(key_2):
@@ -266,20 +266,20 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
     exp = data['Experience']
 
     #A variable made to check, whether pdf label should be displayed or not
-    company_exists = bool(exists(exp, 'company'))
+    company_exists = exists(exp, 'company')
     print(company_exists)
 
     #Education
     edu = data['Education']
 
     #A variable made to check, whether pdf label should be displayed or not
-    institution_exists = bool(exists(edu, 'institution'))
+    institution_exists = exists(edu, 'institution')
 
 
     #Skills
     ski = data['Skill']
     #A variable made to check, whether pdf label should be displayed or not
-    skill_exists = bool(exists(ski, 'skill', 'rating'))
+    skill_exists = exists(ski, 'skill', 'rating')
 
 
 
@@ -287,7 +287,7 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
        
     lic = data['License']
     #A variable made to check, whether pdf label should be displayed or not
-    license_exists = bool(exists(lic, 'name', 'date_finished'))
+    license_exists = exists(lic, 'name', 'date_finished')
 
     print(license_exists)
 
