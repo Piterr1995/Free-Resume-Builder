@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import PersonalInfoForm, ExperienceForm, EducationForm, SkillForm, LicensesAndCertificationsForm
+from .forms import PersonalInfoForm, ExperienceForm, EducationForm, SkillForm, LicenseForm
 from django.http import HttpResponse, HttpResponseRedirect
 from redis import StrictRedis
 from django.conf import settings
@@ -21,7 +21,7 @@ def index(request):
     ExperienceFormset = formset_factory(ExperienceForm, extra=9)
     EducationFormset = formset_factory(EducationForm, extra=4)
     SkillFormset = formset_factory(SkillForm, extra=9)
-    LicensesAndCertificationsFormset = formset_factory(LicensesAndCertificationsForm, extra=7)
+    LicenseFormset = formset_factory(LicenseForm, extra=5)
     
     if request.method == "POST":
         #Personal info Form
@@ -37,10 +37,10 @@ def index(request):
         skill_formset = SkillFormset(request.POST, prefix="skill")
 
         #Licenses and Certifications formset
-        licenses_and_certifications_formset = LicensesAndCertificationsFormset(request.POST, prefix="license_or_cerfiticate")
+        license_formset = LicenseFormset(request.POST, prefix="license")
 
 
-        if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid() and skill_formset.is_valid() and licenses_and_certifications_formset.is_valid():
+        if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid() and skill_formset.is_valid() and license_formset.is_valid():
 
             #Personal Info
             pi_cd = personal_info_form.cleaned_data
@@ -157,20 +157,21 @@ def index(request):
 
 
             #Licenses and certifications
-            data['Licenses_and_certifications'] = {}
+            data['License'] = {}
+
             for index, license_form in enumerate(licenses_and_certifications_formset):
                 l = license_form.cleaned_data
 
-                if l.get('name') and l.get('date_finished'):
-                    name = l.get('skill')
+                if l.get('license_name') and l.get('date_finished'):
+                    name = l.get('license_name')
                     date_finished = str(s.get('date_finished'))
                 else:
                     name = None
                     date_finished = None
 
-                data['Licenses_and_certifications'][f'{index}'] = {
+                data['License'][f'{index}'] = {
                                             'name': name,
-                                            'end_date': date_finished
+                                            'date_finished': date_finished
                                             }
 
             
@@ -206,14 +207,14 @@ def index(request):
         skill_formset = SkillFormset(prefix="skill")
 
         #Licenses and Certifications Formset
-        licenses_and_certifications_formset = LicensesAndCertificationsFormset(prefix="license_or_certification")
+        license_formset = LicenseFormset(prefix="license_or_certification")
 
         
     return render(request, 'tempresume/index.html', {'personal_info_form': personal_info_form, 
                                                     'experience_formset': experience_formset, 
                                                     'education_formset': education_formset, 
                                                     'skill_formset': skill_formset, 
-                                                    'licenses_and_certification_formset': licenses_and_certifications_formset})
+                                                    'license_formset': license_formset})
 
 
 
