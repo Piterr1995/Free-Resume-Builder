@@ -252,6 +252,11 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
 
 
     def exists(_dict: Dict[str, Any], key_1, key_2=None) -> bool:
+        # if key_2:
+        #     return _dict.get(key_1) is not None and _dict.get(key_2) is not None
+        
+        # else:
+        #     return _dict.get(key_1) is not None
         if key_2:
             for index, item in enumerate(_dict.values()):
                 if item.get(key_1) and item.get(key_2):

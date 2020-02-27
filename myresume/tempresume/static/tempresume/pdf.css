@@ -85,7 +85,8 @@
     width: 30%;
     background-color: #16313f;
     color: white;
-    height: 991px;
+    /* height: 991px; */
+    height: 100%;
     position: absolute;
     z-index: -10;
   }
@@ -111,6 +112,7 @@
     float: left;
     color: #EDBB00;
     padding: 5px;
+    padding-right: 10px;
     
     font-weight: bold;
     font-size: 0.8em;
@@ -138,32 +140,36 @@
 
   .position_or_specialisation {
     font-size: 0.9em;
+    font-style: italic;
   }
 
   .experience_or_education_duration {
     float: right;
     width: 40%;
     text-align: right;
-    font-size: 0.8em;
+    font-size: 0.9em;
   }
 
   .experience_or_education_description {
     list-style-position: inside;
     text-align: justify;
-    font-size: 0.8em;
+    font-size: 0.9em;
+    margin-left: 20px;
   }
 
   .skill_and_rating {
     box-sizing: border-box;
     width: 50%;
-    float: left;
-    padding-right: 3px;
+   
+    font-size: 0.9em;
+    
     
     
   }
 
   .skill {
     width: 50%;
+    
   }
 
   .rating {
