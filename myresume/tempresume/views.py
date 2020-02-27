@@ -254,34 +254,21 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
     exp = data['Experience']
 
     #A variable made to check, whether pdf label should be displayed or not
-    # company_exists = False
     company_exists = bool(exists(exp, 'company'))
     print(company_exists)
-
-    # for item in exp.values():
-    #     if item['company']:
-    #         company_exists = True
-
-
 
     #Education
     edu = data['Education']
 
     #A variable made to check, whether pdf label should be displayed or not
     institution_exists = bool(exists(edu, 'institution'))
-    # for item in edu.values():
-    #     if item['institution']:
-    #         institution_exists = True
-    print(institution_exists)
+
 
     #Skills
     ski = data['Skill']
     #A variable made to check, whether pdf label should be displayed or not
-    skill_and_vote_exists = bool(exists(ski, 'skill', 'rating'))
-    # for item in ski.values():
-    #     if item['skill'] and item['rating']:
-    #         skill_and_vote_exists = True
-    print(skill_and_vote_exists)
+    skill_exists = bool(exists(ski, 'skill', 'rating'))
+
 
 
     #Licenses and certifications
@@ -289,16 +276,8 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
     lic = data['License']
     #A variable made to check, whether pdf label should be displayed or not
     license_exists = bool(exists(lic, 'name', 'date_finished'))
-    
-    # for item in lic.values():
-    #     if item['name'] and item['date_finished']:
-    #         license_exists = True
-    print(license_exists)
 
-     #Checking if company exists for pdf label purposes
-    # if e.get('company'):
-    #     company_exists = True
-        
+    print(license_exists)
 
     html = render_to_string('tempresume/test.html', {'data': data, 
                                                     'first_name': first_name,
@@ -315,7 +294,7 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
                                                     'edu': edu,
                                                     'institution_exists': institution_exists,
                                                     'ski': ski,
-                                                    'skill_and_vote_exists': skill_and_vote_exists,
+                                                    'skill_exists': skill_exists,
                                                     'lic': lic,
                                                     'license_exists': license_exists,
                                                 
