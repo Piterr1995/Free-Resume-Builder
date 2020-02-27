@@ -153,6 +153,26 @@
                 </div>
                 {% endif %}
 
+                {% if license_exists %}
+                <div class="data_box license_box">
+                    <div class="label">LICENSES & CERTIFICAITONS</div>
+                    <div class="data">
+                        {% for key, values in lic.items  %}
+                            {% if values.name is not None and values.date_finished is not None%}
+                            <div class="skill_and_rating">
+                                <span class="skill">{{ values.name }}</span>
+                                <span class="rating">
+                                    {{ values.date_finished }}                                    
+                                </span>
+                                
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    
+                </div>
+                {% endif %}
+
 
             <div style="clear: both;"></div>
             

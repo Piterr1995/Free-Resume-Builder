@@ -10,6 +10,7 @@ from django.views.decorators.http import require_POST
 from django.urls import reverse_lazy, reverse
 from django.template.loader import render_to_string
 import weasyprint
+from typing import Dict, Any
 # Create your views here
 
 r = StrictRedis(host=settings.REDIS_HOST,
@@ -162,16 +163,16 @@ def index(request):
             for index, license_form in enumerate(license_formset):
                 l = license_form.cleaned_data
 
-                if l.get('license_name') and l.get('date_finished'):
-                    name = l.get('license_name')
-                    date_finished = str(s.get('date_finished'))
+                if l.get('name') and l.get('date_finished'):
+                    name = l.get('name')
+                    date_finished = str(l.get('date_finished'))
                 else:
                     name = None
                     date_finished = None
 
                 data['License'][f'{index}'] = {
                                             'name': name,
-                                            'date_finished': date_finished
+                                            'date_finished': date_finished,
                                             }
 
             
@@ -240,16 +241,17 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
 
 
 
-    def exists(dict_, key, key2=False):
+    def exists(_dict: Dict[str, Any], key_1: str, key_2: str = None):
         if key2:
-            for index, item in enumerate(dict_.values()):
-                if item[key] and item[key2]:
+            for index, item in enumerate(_dict.values()):
+                if item.get(key_1) and item.get(key_2):
                     return True
 
         else:
-            for index, item in enumerate(dict_.values()):
+            for index, item in enumerate(_dict.values()):
                 if item[key]:
                     return True
+  
     #Experience
     exp = data['Experience']
 

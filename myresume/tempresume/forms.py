@@ -40,6 +40,9 @@ class SkillForm(forms.Form):
     rating = forms.TypedChoiceField(choices=CHOICES, required=False)
 
 class LicenseForm(forms.Form):
-    license_name = forms.CharField(max_length=50, required=False, label="License or certificate name")
+    name = forms.CharField(max_length=50, required=False, label="License or certificate name")
     date_finished = forms.DateField(required=False, label="Date finished", widget=forms.SelectDateWidget)
  
+
+class Clause(forms.Form):
+    text = RichTextFormField(required=False)
