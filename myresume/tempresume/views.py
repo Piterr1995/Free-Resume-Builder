@@ -21,7 +21,7 @@ def index(request):
     ExperienceFormset = formset_factory(ExperienceForm, extra=9)
     EducationFormset = formset_factory(EducationForm, extra=4)
     SkillFormset = formset_factory(SkillForm, extra=9)
-    LicenseFormset = formset_factory(LicenseForm, extra=5)
+    LicenseFormset = formset_factory(LicenseForm, extra=4)
     
     if request.method == "POST":
         #Personal info Form
@@ -156,10 +156,10 @@ def index(request):
                 }
 
 
-            #Licenses and certifications
+            # #Licenses and certifications
             data['License'] = {}
 
-            for index, license_form in enumerate(licenses_and_certifications_formset):
+            for index, license_form in enumerate(license_formset):
                 l = license_form.cleaned_data
 
                 if l.get('license_name') and l.get('date_finished'):
@@ -206,15 +206,16 @@ def index(request):
         #SkillFormset
         skill_formset = SkillFormset(prefix="skill")
 
-        #Licenses and Certifications Formset
-        license_formset = LicenseFormset(prefix="license_or_certification")
+        # #Licenses and Certifications Formset
+        license_formset = LicenseFormset(prefix="license")
 
         
     return render(request, 'tempresume/index.html', {'personal_info_form': personal_info_form, 
                                                     'experience_formset': experience_formset, 
                                                     'education_formset': education_formset, 
                                                     'skill_formset': skill_formset, 
-                                                    'license_formset': license_formset})
+                                                    'license_formset': license_formset,
+                                                    })
 
 
 
@@ -272,22 +273,22 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
 
     #Licenses and certifications
        
-    lic = data['Licenses_and_certifications']
+    lic = data['License']
     #A variable made to check, whether pdf label should be displayed or not
-    license_and_finished_date_exists = False
+    license_exists = False
     
     for item in lic.values():
         if item['name'] and item['date_finished']:
-            license_and_finished_date_exists = True
-    print(license_and_finished_date_exists)
+            license_exists = True
+    print(license_exists)
 
-    # 
-    # company_exists = False
+    
+    company_exists = False
 
-    #  #Checking if company exists for pdf label purposes
+     #Checking if company exists for pdf label purposes
     # if e.get('company'):
     #     company_exists = True
-    #     continue
+        
 
     html = render_to_string('tempresume/test.html', {'data': data, 
                                                     'first_name': first_name,
@@ -306,7 +307,7 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
                                                     'ski': ski,
                                                     'skill_and_vote_exists': skill_and_vote_exists,
                                                     'lic': lic,
-                                                    'license_and_finished_date_exists': license_and_finished_date_exists,
+                                                    'license_exists': license_exists,
                                                 
 
                                                     })
