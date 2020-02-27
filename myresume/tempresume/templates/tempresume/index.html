@@ -19,6 +19,9 @@
 
             {{ license_formset|crispy }}
 
+            {{ clause_form|crispy }}
+            {{ clause_form.media }}
+
         {% csrf_token %}
         <input type="submit" value="dodaj">
         

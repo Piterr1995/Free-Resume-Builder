@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import PersonalInfoForm, ExperienceForm, EducationForm, SkillForm, LicenseForm
+from .forms import PersonalInfoForm, ExperienceForm, EducationForm, SkillForm, LicenseForm, ClauseForm
 from django.http import HttpResponse, HttpResponseRedirect
 from redis import StrictRedis
 from django.conf import settings
@@ -40,8 +40,11 @@ def index(request):
         #Licenses and Certifications formset
         license_formset = LicenseFormset(request.POST, prefix="license")
 
+        #Clause form
+        clause_form = ClauseForm(request.POST, prefix="clause")
 
-        if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid() and skill_formset.is_valid() and license_formset.is_valid():
+
+        if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid() and skill_formset.is_valid() and license_formset.is_valid() and clause_form.is_valid():
 
             #Personal Info
             pi_cd = personal_info_form.cleaned_data
@@ -177,7 +180,12 @@ def index(request):
 
             
 
-            # print(data)
+            #Clause
+            data['Clause'] = {
+                                "text": clause_form.cleaned_data.get('text'),
+            }
+
+            print(data['Clause']) 
             
             rdict = json.dumps(data)
             r.set(f'{CV_name}/{date_of_birth}', rdict)
@@ -210,12 +218,14 @@ def index(request):
         # #Licenses and Certifications Formset
         license_formset = LicenseFormset(prefix="license")
 
-        
+        #Clause form
+        clause_form = ClauseForm(prefix="clause")
     return render(request, 'tempresume/index.html', {'personal_info_form': personal_info_form, 
                                                     'experience_formset': experience_formset, 
                                                     'education_formset': education_formset, 
                                                     'skill_formset': skill_formset, 
                                                     'license_formset': license_formset,
+                                                    'clause_form': clause_form,
                                                     })
 
 
@@ -241,15 +251,15 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
 
 
 
-    def exists(_dict: Dict[str, Any], key_1: str, key_2: str = None):
-        if key2:
+    def exists(_dict: Dict[str, Any], key_1, key_2=None):
+        if key_2:
             for index, item in enumerate(_dict.values()):
                 if item.get(key_1) and item.get(key_2):
                     return True
 
         else:
             for index, item in enumerate(_dict.values()):
-                if item[key]:
+                if item.get(key_1):
                     return True
   
     #Experience
@@ -281,6 +291,11 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
 
     print(license_exists)
 
+
+    cla = data['Clause']
+
+    clause_exists = cla.get('text') != None
+
     html = render_to_string('tempresume/test.html', {'data': data, 
                                                     'first_name': first_name,
                                                     'last_name': last_name,
@@ -299,6 +314,8 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
                                                     'skill_exists': skill_exists,
                                                     'lic': lic,
                                                     'license_exists': license_exists,
+                                                    'cla': cla,
+                                                    'clause_exists': clause_exists,
                                                 
 
                                                     })

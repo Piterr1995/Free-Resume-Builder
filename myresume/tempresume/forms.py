@@ -44,5 +44,5 @@ class LicenseForm(forms.Form):
     date_finished = forms.DateField(required=False, label="Date finished", widget=forms.SelectDateWidget)
  
 
-class Clause(forms.Form):
-    text = RichTextFormField(required=False)
+class ClauseForm(forms.Form):
+    text = RichTextFormField(required=False, label="Clause")

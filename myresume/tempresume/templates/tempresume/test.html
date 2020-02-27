@@ -173,6 +173,27 @@
                 </div>
                 {% endif %}
 
+                {% if clause_exists %}
+                <div class="data_box clause_box">
+                    <div class="label">CLAUSE</div>
+                    <div class="data">
+                        {{ cla.text }}
+                        <!-- {% for key, values in lic.items  %}
+                            {% if values.name is not None and values.date_finished is not None%}
+                            <div class="skill_and_rating">
+                                <span class="skill">{{ values.name }}</span>
+                                <span class="rating">
+                                    {{ values.date_finished }}                                    
+                                </span>
+                                
+                            </div>
+                            {% endif %}
+                        {% endfor %} -->
+                    </div>
+                    
+                </div>
+                {% endif %}
+
 
             <div style="clear: both;"></div>
             
