@@ -107,6 +107,7 @@
   .label {
     box-sizing: border-box;
     width: 30%;
+    height: 100%;
     /* height: 991px; */
     text-align: right;
     float: left;
@@ -160,7 +161,7 @@
   .skill_and_rating {
     box-sizing: border-box;
     width: 50%;
-   
+    float: left;
     font-size: 0.9em;
     
     

@@ -232,8 +232,6 @@ def index(request):
 
 def generate_pdf(request, r_CV_name, r_date_of_birth):
     data_from_redis_json = r.get(f"{r_CV_name}/{r_date_of_birth}")
-    # Not generating but testing only
-    # data_from_redis = r.get(f'{slug}')
     data = json.loads(data_from_redis_json)
     print(data)
 
