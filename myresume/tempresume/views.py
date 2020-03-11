@@ -11,44 +11,53 @@ from django.urls import reverse_lazy, reverse
 from django.template.loader import render_to_string
 import weasyprint
 from typing import Dict, Any
-# Create your views here
 
+
+# Redis is used to hold our data for a certain perion of time which we will specify later
+# The reason for that is to delete old data automatically to keep our database slim
 r = StrictRedis(host=settings.REDIS_HOST,
                 port=settings.REDIS_PORT,
                 db=settings.REDIS_DB)
 
 
 def index(request):
-    ExperienceFormset = formset_factory(ExperienceForm, extra=9)
-    EducationFormset = formset_factory(EducationForm, extra=4)
-    SkillFormset = formset_factory(SkillForm, extra=9)
-    LicenseFormset = formset_factory(LicenseForm, extra=4)
+    ExperienceFormset = formset_factory(ExperienceForm, extra=9) # 9x experience form
+    EducationFormset = formset_factory(EducationForm, extra=4) #4x education form
+    SkillFormset = formset_factory(SkillForm, extra=9) #9x skill form
+    LicenseFormset = formset_factory(LicenseForm, extra=4) #4x certifications and licenses form
     
     if request.method == "POST":
-        #Personal info Form
+
+        #Personal info Form (CV_name input is to create a slug for generated CV)
+        #Fields: first name, last name, current job title, mobile, email, date of birth, address, postal code, city
         personal_info_form = PersonalInfoForm(request.POST)
 
         #Experience formset
+        #Fields: company, position, start date, end date and description
         experience_formset = ExperienceFormset(request.POST, prefix='experience')
         
         #Education formsset
+        #Fields: institution, specialisation, start date, end date, description
         education_formset = EducationFormset(request.POST, prefix='education')
 
         #Skills formset
+        #Fields: skill, rating(1-5)
         skill_formset = SkillFormset(request.POST, prefix="skill")
 
         #Licenses and Certifications formset
+        #Fields: name, date finished
         license_formset = LicenseFormset(request.POST, prefix="license")
 
         #Clause form
+        #Fields: text
         clause_form = ClauseForm(request.POST, prefix="clause")
 
-
+        #Validating the data entered into forms
         if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid() and skill_formset.is_valid() and license_formset.is_valid() and clause_form.is_valid():
 
-            #Personal Info
+            #Personal Info data. Converting some of the data into string in order
+            #to convert it to json
             pi_cd = personal_info_form.cleaned_data
-
             CV_name = pi_cd['CV_name']
             first_name = pi_cd['first_name']
             last_name = pi_cd['last_name']
@@ -72,20 +81,16 @@ def index(request):
                                     }
 
 
-            # Experience
+            # Experience. Here we will put all the data from experience forms
             data["Experience"] = {}
-
-            
-
             for index, exp_form in enumerate(experience_formset):
-                # Assigning a variable to easily get data from forms
+                # Creating a variable to easily get data from forms
                 e = exp_form.cleaned_data
-
-                   
+             
                 # Fields from cleaned data dictionary
                 fields = ['company', 'position', 'start_date', 'end_date', 'description']
                 
-                #Here we will add values for each of above fields
+                #Here we will assign values for all of the above fields
                 exp_variables = []
                 
                 for field in fields:
@@ -94,13 +99,14 @@ def index(request):
                     else:
                         exp_variables.append(None)
                 
-                # print(edu_variables)
                 company = exp_variables[0]
                 position = exp_variables[1]
                 start_date = exp_variables[2]
                 end_date = exp_variables[3]
                 description = exp_variables[4]
 
+                #Here we add all the experience data to our dictionary
+                #The process is later repeated for all the data collected from forms
                 data['Experience'][f'{index}'] = {'company': company,
                                                 'position': position,
                                                 'start_date': start_date,
@@ -128,7 +134,6 @@ def index(request):
                     else:
                         edu_variables.append(None)
                 
-                # print(edu_variables)
                 institution = edu_variables[0]
                 specialisation = edu_variables[1]
                 start_date = edu_variables[2]
@@ -187,23 +192,24 @@ def index(request):
 
             print(data['Clause']) 
             
+            #Converting all the Resume data into json
+            #The data will be stored in redis database with CV_name/date_of_birth key
+            #The data will expire after 10 000 seconds.
             rdict = json.dumps(data)
             r.set(f'{CV_name}/{date_of_birth}', rdict)
             r.expire(f'{CV_name}/{date_of_birth}', 10000)
             
-            print(date_of_birth)
-            # data_from_redis = r.get(f'{CV_name}/{date_of_birth}')
-            # results = json.loads(data_from_redis)
-
-            # print(results)
+            #These arguments will be passed to url
             r_CV_name = personal_info_form.cleaned_data['CV_name']
             r_date_of_birth = personal_info_form.cleaned_data['date_of_birth']
-            # slug = CV_name + "/" + date_of_birth
             
+            #Here we are being redirected to our Resume that we've just created
             return HttpResponseRedirect(reverse_lazy('tempresume:generate_pdf', args=[r_CV_name, r_date_of_birth]))
-            # return HttpResponseRedirect(request.path_info)
+
     else:
-        print("witam")
+        
+        #Showing all the forms to our user
+
         personal_info_form = PersonalInfoForm()
         
         # ExperienceFormset = formset_factory(ExperienceForm, extra=9)
@@ -248,13 +254,9 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
     city = pi.get('city')
 
 
-
+    #This is the function that we use to check, whether the label for a certain data should be displayed,
+    #if there was no data provided by the user, the label won't be displayed in pdf.
     def exists(_dict: Dict[str, Any], key_1, key_2=None) -> bool:
-        # if key_2:
-        #     return _dict.get(key_1) is not None and _dict.get(key_2) is not None
-        
-        # else:
-        #     return _dict.get(key_1) is not None
         if key_2:
             for index, item in enumerate(_dict.values()):
                 if item.get(key_1) and item.get(key_2):
@@ -286,9 +288,9 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
 
 
 
-    #Licenses and certifications
-       
+    #Licenses and certifications      
     lic = data['License']
+
     #A variable made to check, whether pdf label should be displayed or not
     license_exists = exists(lic, 'name', 'date_finished')
 
@@ -299,6 +301,7 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
 
     clause_exists = cla.get('text') != None
 
+    #This is the data needed to create our Resume in pdf format.
     html = render_to_string('tempresume/test.html', {'data': data, 
                                                     'first_name': first_name,
                                                     'last_name': last_name,
@@ -323,8 +326,8 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
 
                                                     })
 
-
+    #Here WeasyPrint deals with all the data provided and renders a pdf file,
+    #which can be downloaded
     response = HttpResponse(content_type='application/pdf')
     weasyprint.HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response, stylesheets=[weasyprint.CSS(settings.STATIC_ROOT + 'tempresume/pdf.css')])
     return response
-    # return render(request, 'tempresume/test.html', {})
