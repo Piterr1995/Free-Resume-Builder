@@ -3,7 +3,7 @@ This project allows users to quickly create a resume and download it as a pdf fi
 It is build with Django, Python, HTML, CSS, SQLite and Redis database and all the suggestions are highly appreciated.
 
 <h2>How to create a nicely looking resume?</h2>
-1. Activate the virtualenv with command -> source my_env\bin\activate <br>
+1. Activate virtualenv with the command -> source my_env\bin\activate <br>
 2. Enter the project folder -> cd myresume <br>
 3. Run server with python manage.py runserver <br>
 4. Fill as many forms as you need. You can leave most of them empty (only personal info is required) <br>
