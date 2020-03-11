@@ -1,6 +1,6 @@
 <h1>Welcome to the Free Resume Builder</h1>
 This project allows users to quickly create a resume and download it as a pdf file. <br>
-It is build with Django, Python, HTML, CSS, SQLite and Redis database and all the suggestions are highly appreciated.
+It is build with Django, Python, HTML, CSS, SQLite and Redis database. All the suggestions are highly appreciated.
 
 <h2>How to create a nicely looking resume?</h2>
 1. Activate virtualenv with the command -> source my_env\bin\activate <br>
