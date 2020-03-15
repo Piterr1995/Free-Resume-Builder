@@ -7,5 +7,5 @@ It is build with Django, Python, HTML, CSS, SQLite and Redis database. All the s
 2. Enter the project folder -> cd myresume <br>
 3. Run server with python manage.py runserver <br>
 4. Fill as many forms as you need. You can leave most of them empty (only personal info is required) <br>
-5. Click generate and download our resume <br>
+5. Click generate and download your resume <br>
 6. IT IS AS EASY AS THAT! <br>
