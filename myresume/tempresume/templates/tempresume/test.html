@@ -43,7 +43,7 @@
                 {% if company_exists %}
                 <div class="data_box experience_box">
                     
-                    <div class="label">PROFESSIONAL EXPERIENCE</div>
+                    <div class="label">DOŚWIADCZENIE ZAWODOWE</div>
                     <div class="data">
                         {% for key, values in exp.items  %}
                         
@@ -88,7 +88,7 @@
                 {% if institution_exists %}
                 <div class="data_box education_box">
                 
-                    <div class="label">EDUCATION</div>
+                    <div class="label">EDUKACJA</div>
                     <div class="data">
                         {% for key, values in edu.items  %}
                         
@@ -133,7 +133,7 @@
 
                 {% if skill_exists %}
                 <div class="data_box skill_box">
-                    <div class="label">ADDITIONAL SKILLS</div>
+                    <div class="label">DODATKOWE UMIEJĘTNOŚCI</div>
                     <div class="data">
                         {% for key, values in ski.items  %}
                             {% if values.skill is not None and values.rating is not None%}
@@ -157,7 +157,7 @@
 
                 {% if license_exists %}
                 <div class="data_box license_box">
-                    <div class="label">LICENSES & CERTIFICATIONS</div>
+                    <div class="label">LICENCJE I CERTYFIKATY</div>
                     <div class="data">
                         {% for key, values in lic.items  %}
                             {% if values.name is not None and values.date_finished is not None%}
@@ -175,10 +175,21 @@
                 </div>
                 <div style="clear: both;"></div>
                 {% endif %}
+                
 
                 {% if clause_exists %}
                 <div class="data_box clause_box">
-                    <div class="label">CLAUSE</div>
+                    <div class="label">ZAINTERESOWANIA I CELE</div>
+                    <div class="data" style="text-align: justify; font-size: 0.9em;">
+                        {{ inte.text|safe }}
+                    </div>
+                    
+                </div>
+                {% endif %}
+                <div style="clear: both"></div>
+                {% if clause_exists %}
+                <div class="data_box clause_box">
+                    <div class="label">KLAUZULA</div>
                     <div class="data" style="text-align: justify; font-size: 0.9em;">
                         {{ cla.text|safe }}
                     </div>

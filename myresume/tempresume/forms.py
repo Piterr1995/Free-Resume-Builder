@@ -17,15 +17,15 @@ class ExperienceForm(forms.Form):
     company = forms.CharField(max_length=100, required=False)
     # job_location = forms.CharField(max_length=100, required=False)
     position = forms.CharField(max_length=100, required=False)
-    start_date = forms.DateField(required=False, widget=forms.SelectDateWidget)
-    end_date = forms.DateField(required=False, widget=forms.SelectDateWidget) 
+    start_date = forms.CharField(required=False)
+    end_date = forms.CharField(required=False) 
     description = RichTextFormField(required=False)
 
 class EducationForm(forms.Form):
     institution = forms.CharField(max_length=100, required=False)
     specialisation = forms.CharField(max_length=100, required=False)
-    start_date = forms.DateField(required=False)
-    end_date = forms.DateField(required=False)
+    start_date = forms.CharField(required=False)
+    end_date = forms.CharField(required=False)
     description = RichTextFormField(required=False)
 
 class SkillForm(forms.Form):
@@ -43,6 +43,8 @@ class LicenseForm(forms.Form):
     name = forms.CharField(max_length=50, required=False, label="License or certificate name")
     date_finished = forms.DateField(required=False, label="Date finished", widget=forms.SelectDateWidget)
  
+class InterestForm(forms.Form):
+    text = RichTextFormField(required=False, label="Interest")
 
 class ClauseForm(forms.Form):
     text = RichTextFormField(required=False, label="Clause")

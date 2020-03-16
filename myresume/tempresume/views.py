@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from .forms import PersonalInfoForm, ExperienceForm, EducationForm, SkillForm, LicenseForm, ClauseForm
+from .forms import PersonalInfoForm, ExperienceForm, EducationForm, SkillForm, LicenseForm, InterestForm, ClauseForm
 from django.http import HttpResponse, HttpResponseRedirect
 from redis import StrictRedis
 from django.conf import settings
@@ -23,37 +23,35 @@ r = StrictRedis(host=settings.REDIS_HOST,
 def index(request):
     ExperienceFormset = formset_factory(ExperienceForm, extra=9) # 9x experience form
     EducationFormset = formset_factory(EducationForm, extra=4) #4x education form
-    SkillFormset = formset_factory(SkillForm, extra=9) #9x skill form
+    SkillFormset = formset_factory(SkillForm, extra=15) #15x skill form
     LicenseFormset = formset_factory(LicenseForm, extra=4) #4x certifications and licenses form
     
     if request.method == "POST":
 
         #Personal info Form (CV_name input is to create a slug for generated CV)
-        #Fields: first name, last name, current job title, mobile, email, date of birth, address, postal code, city
         personal_info_form = PersonalInfoForm(request.POST)
 
         #Experience formset
-        #Fields: company, position, start date, end date and description
         experience_formset = ExperienceFormset(request.POST, prefix='experience')
         
         #Education formsset
-        #Fields: institution, specialisation, start date, end date, description
         education_formset = EducationFormset(request.POST, prefix='education')
 
         #Skills formset
-        #Fields: skill, rating(1-5)
         skill_formset = SkillFormset(request.POST, prefix="skill")
 
         #Licenses and Certifications formset
-        #Fields: name, date finished
         license_formset = LicenseFormset(request.POST, prefix="license")
 
+        #Interest form
+        interest_form = InterestForm(request.POST, prefix="interest")
+
         #Clause form
-        #Fields: text
         clause_form = ClauseForm(request.POST, prefix="clause")
+        
 
         #Validating the data entered into forms
-        if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid() and skill_formset.is_valid() and license_formset.is_valid() and clause_form.is_valid():
+        if personal_info_form.is_valid() and experience_formset.is_valid() and education_formset.is_valid() and skill_formset.is_valid() and license_formset.is_valid() and interest_form.is_valid() and clause_form.is_valid():
 
             #Personal Info data. Converting some of the data into string in order
             #to convert it to json
@@ -183,13 +181,17 @@ def index(request):
                                             'date_finished': date_finished,
                                             }
 
-            
+            #Interests and goals
+            data['Interest'] = {
+                                "text": interest_form.cleaned_data.get('text'),
+            }
 
             #Clause
             data['Clause'] = {
                                 "text": clause_form.cleaned_data.get('text'),
             }
 
+            print(data['Interest'])
             print(data['Clause']) 
             
             #Converting all the Resume data into json
@@ -218,19 +220,24 @@ def index(request):
         # EducationFormset = formset_factory(EducationForm, extra=4)
         education_formset = EducationFormset(prefix='education')
 
-        #SkillFormset
+        # SkillFormset
         skill_formset = SkillFormset(prefix="skill")
 
-        # #Licenses and Certifications Formset
+        # Licenses and Certifications Formset
         license_formset = LicenseFormset(prefix="license")
 
-        #Clause form
+        # Interests and goals Form
+        interest_form = InterestForm(prefix="interest")
+
+        # Clause form
         clause_form = ClauseForm(prefix="clause")
+
     return render(request, 'tempresume/index.html', {'personal_info_form': personal_info_form, 
                                                     'experience_formset': experience_formset, 
                                                     'education_formset': education_formset, 
                                                     'skill_formset': skill_formset, 
                                                     'license_formset': license_formset,
+                                                    'interest_form': interest_form,
                                                     'clause_form': clause_form,
                                                     })
 
@@ -296,9 +303,12 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
 
     print(license_exists)
 
+    #Interests and goals
+    inte = data['Interest']
+    interest_exists = inte.get('text') != None
 
+    #Clause
     cla = data['Clause']
-
     clause_exists = cla.get('text') != None
 
     #This is the data needed to create our Resume in pdf format.
@@ -320,6 +330,8 @@ def generate_pdf(request, r_CV_name, r_date_of_birth):
                                                     'skill_exists': skill_exists,
                                                     'lic': lic,
                                                     'license_exists': license_exists,
+                                                    'inte': inte,
+                                                    'interest_exists': interest_exists,
                                                     'cla': cla,
                                                     'clause_exists': clause_exists,
                                                 
