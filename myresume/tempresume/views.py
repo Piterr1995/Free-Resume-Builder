@@ -199,7 +199,7 @@ def index(request):
             #The data will expire after 10 000 seconds.
             rdict = json.dumps(data)
             r.set(f'{CV_name}/{date_of_birth}', rdict)
-            r.expire(f'{CV_name}/{date_of_birth}', 10000)
+            # r.expire(f'{CV_name}/{date_of_birth}', 10000)
             
             #These arguments will be passed to url
             r_CV_name = personal_info_form.cleaned_data['CV_name']
