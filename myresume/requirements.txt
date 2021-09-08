@@ -13,7 +13,7 @@ django-weasyprint==0.5.5
 dotobject==1.2.1
 html5lib==1.0.1
 lxml==4.5.0
-Pillow==7.0.0
+Pillow==8.3.2
 pkg-resources==0.0.0
 pycparser==2.19
 Pyphen==0.9.5
